@@ -175,28 +175,12 @@ namespace DrReiz.RoboGamer
             var startMissionPoint = new Point(180, 360);
             var endChallengePoint = new Point(320, 590);
 
-            var vm_host = "192.168.1.38";
+            var vm_host = "169.254.200.106";
 
-            var client = new System.Net.Sockets.TcpClient(vm_host, 7001);
-            var clientStream = client.GetStream();
-            var clientWriter = new System.IO.BinaryWriter(clientStream);
+            var client = new MouseClient(vm_host);
 
-            Action<MouseEventFlags, int, int> mouse_event = (flags, x, y) =>
-            {
-                var messageStream = new System.IO.MemoryStream();
-                var messageWriter = new System.IO.BinaryWriter(messageStream);
-                messageWriter.Write(0);
-                messageWriter.Write((uint)flags);
-                messageWriter.Write(x);
-                messageWriter.Write(y);
-                messageWriter.Write(0);
-                var message = messageStream.ToArray();
-                clientWriter.Write(message.Length);
-                clientWriter.Write(message);
-                clientStream.Flush();
-            };
 
-            var background = LoadBitmap("background.png");
+            var background = LoadBitmap("../../Zuma.Data/background.png");
             var hsv_background = new Mat(background.ToIplImage(), true).CvtColor(ColorConversion.RgbToHsv).Split();
 
 
@@ -254,28 +238,28 @@ namespace DrReiz.RoboGamer
                     {
                         case "main":
                             Console.WriteLine("main");
-                            mouse_event(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, startButtonPoint.X * 65536 / game_width, startButtonPoint.Y * 65536 / game_height);
+                            client.MouseEvent(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, startButtonPoint.X * 65536 / game_width, startButtonPoint.Y * 65536 / game_height);
                             System.Threading.Thread.Sleep(400);
-                            mouse_event(MouseEventFlags.LEFTDOWN, 0, 0);
+                            client.MouseEvent(MouseEventFlags.LEFTDOWN, 0, 0);
                             System.Threading.Thread.Sleep(150);
-                            mouse_event(MouseEventFlags.LEFTUP, 0, 0);
+                            client.MouseEvent(MouseEventFlags.LEFTUP, 0, 0);
                             System.Threading.Thread.Sleep(50);
                             System.Threading.Thread.Sleep(4000);
                             break;
                         case "mission":
-                            mouse_event(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, startMissionPoint.X * 65536 / game_width, startMissionPoint.Y * 65536 / game_height);
+                            client.MouseEvent(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, startMissionPoint.X * 65536 / game_width, startMissionPoint.Y * 65536 / game_height);
                             System.Threading.Thread.Sleep(400);
-                            mouse_event(MouseEventFlags.LEFTDOWN, 0, 0);
+                            client.MouseEvent(MouseEventFlags.LEFTDOWN, 0, 0);
                             System.Threading.Thread.Sleep(150);
-                            mouse_event(MouseEventFlags.LEFTUP, 0, 0);
+                            client.MouseEvent(MouseEventFlags.LEFTUP, 0, 0);
                             System.Threading.Thread.Sleep(50);
                             break;
                         case "end_challenge":
-                            mouse_event(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, endChallengePoint.X * 65536 / game_width, endChallengePoint.Y * 65536 / game_height);
+                            client.MouseEvent(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, endChallengePoint.X * 65536 / game_width, endChallengePoint.Y * 65536 / game_height);
                             System.Threading.Thread.Sleep(400);
-                            mouse_event(MouseEventFlags.LEFTDOWN, 0, 0);
+                            client.MouseEvent(MouseEventFlags.LEFTDOWN, 0, 0);
                             System.Threading.Thread.Sleep(150);
-                            mouse_event(MouseEventFlags.LEFTUP, 0, 0);
+                            client.MouseEvent(MouseEventFlags.LEFTUP, 0, 0);
                             System.Threading.Thread.Sleep(50);
                             break;
                         //case "action":
@@ -298,13 +282,13 @@ namespace DrReiz.RoboGamer
                             if (!isSave)
                                 bmp.Save("b.png");
                             isSave = true;
-                            mouse_event(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, (frogRect.X + frogRect.Width / 2) * 65536 / game_width, 580 * 65536 / game_height);
+                            client.MouseEvent(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, (frogRect.X + frogRect.Width / 2) * 65536 / game_width, 580 * 65536 / game_height);
                             System.Threading.Thread.Sleep(150);
                             if (lastActionTime.AddSeconds(5) < DateTime.UtcNow)
                             {
-                                mouse_event(MouseEventFlags.LEFTDOWN, 0, 0);
+                                client.MouseEvent(MouseEventFlags.LEFTDOWN, 0, 0);
                                 System.Threading.Thread.Sleep(100);
-                                mouse_event(MouseEventFlags.LEFTUP, 0, 0);
+                                client.MouseEvent(MouseEventFlags.LEFTUP, 0, 0);
                                 System.Threading.Thread.Sleep(10);
                                 lastActionTime = DateTime.UtcNow;
                                 continue;
@@ -340,12 +324,12 @@ namespace DrReiz.RoboGamer
                             {
                                 var targetPoint = RotatePointAroundCenter(minBall.Point, frogCenter, -8);
 
-                                mouse_event(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, targetPoint.X * 65536 / game_width, targetPoint.Y * 65536 / game_height);
+                                client.MouseEvent(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, targetPoint.X * 65536 / game_width, targetPoint.Y * 65536 / game_height);
                                 System.Threading.Thread.Sleep(150);
 
-                                mouse_event(MouseEventFlags.LEFTDOWN, 0, 0);
+                                client.MouseEvent(MouseEventFlags.LEFTDOWN, 0, 0);
                                 System.Threading.Thread.Sleep(100);
-                                mouse_event(MouseEventFlags.LEFTUP, 0, 0);
+                                client.MouseEvent(MouseEventFlags.LEFTUP, 0, 0);
                                 System.Threading.Thread.Sleep(10);
                                 lastActionTime = DateTime.UtcNow;
                             }

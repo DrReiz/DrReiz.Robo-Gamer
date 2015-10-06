@@ -75,6 +75,7 @@
     <None Include="Gamers\RoyalQuest.cs" />
     <None Include="Gamers\Travian.cs" />
     <None Include="Gamers\TreasureAdventure.cs" />
+    <Compile Include="MouseClient.cs" />
     <Compile Include="Gamers\Zuma.cs" />
     <Compile Include="OpenCv.ImageHlp.cs" />
     <Compile Include="Program.cs" />
