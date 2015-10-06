@@ -8,7 +8,7 @@ using System.Text;
 
 namespace DrReiz.RoboGamer
 {
-  class DirectGamer
+  public class DirectGamer
   {
     public static Bitmap GetScreenImage(Rectangle rect)
     {

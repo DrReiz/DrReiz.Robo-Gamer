@@ -41,7 +41,10 @@ namespace DrReiz.RoboGamer
             ClientWriter.Flush();
             //clientStream.Flush();
         }
-
+        public void MoveTo(int x, int y, int width, int height)
+        {
+            MouseEvent(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, x * 65536 / width, y * 65536 / height);
+        }
         public void Dispose()
         {
             this.ClientWriter.Dispose();

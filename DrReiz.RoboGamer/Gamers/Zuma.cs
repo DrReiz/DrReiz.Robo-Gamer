@@ -10,160 +10,29 @@ using Point = System.Drawing.Point;
 
 namespace DrReiz.RoboGamer
 {
-    class Zuma : DirectGamer
+    public class Zuma : DirectGamer
     {
+        public static readonly string VmIp = "169.254.200.106";
+
+        //public static readonly System.Drawing.Rectangle VmRect = new System.Drawing.Rectangle();
+
         static readonly string[] hsv_names = new[] { "h", "s", "v" };
         public static void Execute()
         {
             var frogRect = new Rectangle(320, 218, 150, 150);
-            if (false)
-            {
-                var mat = Cv2.GetRotationMatrix2D(new Point2f(10, 10), 45, 1);
-                Console.WriteLine(mat);
-                //Console.WriteLine(mat.Dims);
-                Console.WriteLine(mat.Size());
-                var p = new Mat(3, 1, MatType.CV_64FC1);
-                p.Set<double>(0, 0, 0);
-                p.Set<double>(1, 0, 0);
-                p.Set<double>(2, 0, 1);
-                Console.WriteLine(p);
-                //var q = mat.Cross(p);
-                var q = (mat * p).ToMat();
-                Console.WriteLine(q);
-                Console.WriteLine(q.Get<double>(0, 0));
-                Console.WriteLine(q.Get<double>(1, 0));
+
+            if (Other(frogRect))
                 return;
-            }
-            if (false)
-            {
-                var dir = "Example2/";
 
-                var src = new Mat("0.bmp");
-                var frog = src.Cut(new Rect(frogRect.X, frogRect.Y, frogRect.Width, frogRect.Height));
-                frog.ImWrite(dir + "/frog.bmp");
-
-
-                var frog_hsv_channels = frog.CvtColor(ColorConversion.RgbToHsv).Split();
-                for (var i = 0; i < 3; ++i)
-                    frog_hsv_channels[i].ImWrite(dir + string.Format("frog {0}.png", hsv_names[i]));
-
-                frog_hsv_channels[1].Threshold(210, 255, ThresholdType.Binary).ImWrite(dir + "frog s th.png");
-                return;
-            }
-            if (false)
-            {
-                MakeImagesForArticle();
-
-                return;
-            }
-            if (false)
-            {
-                DetectBallsForArticle();
-                return;
-            }
-            if (false)
-            {
-                var images = Enumerable.Range(0, 3).Select(i => string.Format("{0}.bmp", i)).Select(name => LoadBitmap(name).ToImage()).ToArray();
-                //var zeroImage = new int[images[0].GetLength(0), images[0].GetLength(1)];
-
-                var diff0_1 = images[0].Diff(images[1], 0, 0, 10);
-                var diff1_2 = images[1].Diff(images[2], 0, 0, 10);
-                diff0_1.ToBitmap().Save("diff s 0 1.bmp");
-                diff1_2.ToBitmap().Save("diff s 1 2.bmp");
-                diff0_1.And(diff1_2).ToBitmap().Save("diff s.bmp");
-
-                foreach (var t in new[] { 0, 10, 20, 50, 100 })
-                {
-                    for (var dy = 0; dy < 10; ++dy)
-                    {
-                        images[1].Diff(images[0], 0, dy, t).ToBitmap().Save(string.Format("diff 0 {0} {1}.bmp", dy, t));
-                    }
-                }
-                //foreach (var t in new[] { 0, 10, 20, 50, 100, 150 })
-                //{
-                //  images[1].Diff(zeroImage, 0, 0, t).ToBitmap().Save(string.Format("diff-z {0}.bmp", t));
-                //}
-                return;
-            }
-
-
-            var screenChecks =
-              new[]
-              {
-                  new
-                  {
-                    Name = "main",
-                    Points = new[]
-                    {
-                      new CheckPoint(200, 190, 0xff554a22),
-                      new CheckPoint(65, 400, 0xfff44c41)
-                    }
-                  },
-                  //new
-                  //{
-                  //  Name = "mission",
-                  //  Points = new[]
-                  //  {
-                  //    new CheckPoint(200, 190, 0xffb5d0c7),
-                  //    new CheckPoint(65, 400, 0xffad7630)
-                  //  }
-                  //},
-                  //new
-                  //{
-                  //  Name = "action",
-                  //  Points = new[]
-                  //  {
-                  //    new CheckPoint(950, 10, 0xff72554b),
-                  //    new CheckPoint(10, 10, 0xff462b1d),
-                  //  }
-                  //},
-                  new
-                  {
-                    Name = "mission",
-                    Points = new[]
-                    {
-                      new CheckPoint(261, 75, 0xff814919),
-                      new CheckPoint(616, 522, 0xff3e402b)
-                    }
-                  },
-                  new
-                  {
-                    Name = "action",
-                    Points = new[]
-                    {
-                      new CheckPoint(798, 42, 0xff534533),
-                      new CheckPoint(181, 45, 0xff34361a),
-                    }
-                  },
-                  new
-                  {
-                    Name = "end_challenge",
-                    Points = new[]
-                    {
-                      new CheckPoint(29, 82, 0xffb5797b),
-                      new CheckPoint(739, 525, 0xffce7929),
-                    }
-                  },
-              };
+            var screenChecks = ScreenChecks();
+            screenChecks = ResolveChecks(screenChecks, @"..\..\Zuma.Data");
 
             Func<Bitmap, string> check = image => screenChecks.Where(_check => image.Check(_check.Points)).Select(_check => _check.Name).FirstOrDefault();
 
 
-            var vm_left = 8;
-            var vm_right = 8;
-            var vm_top = 50;
-            var vm_bottom = 30;
+            var vmClient = new VmClient();
 
-            var vm_title = "Windows81 [Running] - Oracle VM VirtualBox";
-
-            var handle = FindWindow(null, vm_title);
-            if (handle == IntPtr.Zero)
-                throw new Exception("Окно не найдено");
-
-
-            RECT rect;
-            GetWindowRect(handle, out rect);
-            var gameScreenRect = new System.Drawing.Rectangle(rect.Left + vm_left, rect.Top + vm_top, rect.Right - rect.Left - vm_right - vm_left, rect.Bottom - rect.Top - vm_bottom - vm_top);
+            var gameScreenRect = vmClient.GameScreenRect;
 
             var game_width = gameScreenRect.Width;
             var game_height = gameScreenRect.Height;
@@ -175,7 +44,7 @@ namespace DrReiz.RoboGamer
             var startMissionPoint = new Point(180, 360);
             var endChallengePoint = new Point(320, 590);
 
-            var vm_host = "169.254.200.106";
+            var vm_host = VmIp;
 
             var client = new MouseClient(vm_host);
 
@@ -246,7 +115,7 @@ namespace DrReiz.RoboGamer
                             System.Threading.Thread.Sleep(50);
                             System.Threading.Thread.Sleep(4000);
                             break;
-                        case "mission":
+                        case "challenge":
                             client.MouseEvent(MouseEventFlags.MOVE | MouseEventFlags.ABSOLUTE, startMissionPoint.X * 65536 / game_width, startMissionPoint.Y * 65536 / game_height);
                             System.Threading.Thread.Sleep(400);
                             client.MouseEvent(MouseEventFlags.LEFTDOWN, 0, 0);
@@ -395,6 +264,86 @@ namespace DrReiz.RoboGamer
                 }
             }
         }
+        static ScreenCheck[] ResolveChecks(ScreenCheck[] checks, string dir)
+        {
+            return checks.Select(check => ResolveCheck(check, dir)).ToArray();
+        }
+        static ScreenCheck ResolveCheck(ScreenCheck check, string dir)
+        {
+            var path = System.IO.Path.Combine(dir, check.Name + ".png");
+            if (!System.IO.File.Exists(path))
+                return check;
+
+            var bmp = (Bitmap)Bitmap.FromFile(path);
+            return new ScreenCheck(check.Name,
+                check.Points
+                    .Select(point => new CheckPoint(point.Point.X, point.Point.Y, (uint)bmp.GetPixel(point.Point.X, point.Point.Y).ToArgb()))
+                    .ToArray()
+             );
+
+        }
+
+        private static ScreenCheck[] ScreenChecks()
+        {
+            return new[]
+                {
+                  new ScreenCheck
+                  (
+                    "main",
+                    new[]
+                    {
+                      new CheckPoint(200, 190, 0xff554a22),
+                      new CheckPoint(65, 400, 0xfff44c41)
+                    }
+                  ),
+                  //new
+                  //{
+                  //  Name = "mission",
+                  //  Points = new[]
+                  //  {
+                  //    new CheckPoint(200, 190, 0xffb5d0c7),
+                  //    new CheckPoint(65, 400, 0xffad7630)
+                  //  }
+                  //},
+                  //new
+                  //{
+                  //  Name = "action",
+                  //  Points = new[]
+                  //  {
+                  //    new CheckPoint(950, 10, 0xff72554b),
+                  //    new CheckPoint(10, 10, 0xff462b1d),
+                  //  }
+                  //},
+                  new ScreenCheck
+                  (
+                    "challenge",
+                    new[]
+                    {
+                      new CheckPoint(261, 75, 0xff814919),
+                      new CheckPoint(616, 522, 0xff3e402b)
+                    }
+                  ),
+                  new ScreenCheck
+                  (
+                    "action",
+                    new[]
+                    {
+                      new CheckPoint(798, 42, 0xff534533),
+                      new CheckPoint(181, 45, 0xff34361a),
+                    }
+                  ),
+                  new ScreenCheck
+                  (
+                    "end_challenge",
+                    new[]
+                    {
+                      new CheckPoint(29, 82, 0xffb5797b),
+                      new CheckPoint(739, 525, 0xffce7929),
+                    }
+                  ),
+              };
+        }
+
         static int Distance2(Point p1, Point p2)
         {
             return (p1.X - p2.X) * (p1.X - p2.X) + (p1.Y - p2.Y) * (p1.Y - p2.Y);
@@ -866,6 +815,80 @@ namespace DrReiz.RoboGamer
             }
             return mask;
         }
+
+        public static bool Other(System.Drawing.Rectangle frogRect)
+        {
+            if (false)
+            {
+                var mat = Cv2.GetRotationMatrix2D(new Point2f(10, 10), 45, 1);
+                Console.WriteLine(mat);
+                //Console.WriteLine(mat.Dims);
+                Console.WriteLine(mat.Size());
+                var p = new Mat(3, 1, MatType.CV_64FC1);
+                p.Set<double>(0, 0, 0);
+                p.Set<double>(1, 0, 0);
+                p.Set<double>(2, 0, 1);
+                Console.WriteLine(p);
+                //var q = mat.Cross(p);
+                var q = (mat * p).ToMat();
+                Console.WriteLine(q);
+                Console.WriteLine(q.Get<double>(0, 0));
+                Console.WriteLine(q.Get<double>(1, 0));
+                return true;
+            }
+            if (false)
+            {
+                var dir = "Example2/";
+
+                var src = new Mat("0.bmp");
+                var frog = src.Cut(new Rect(frogRect.X, frogRect.Y, frogRect.Width, frogRect.Height));
+                frog.ImWrite(dir + "/frog.bmp");
+
+
+                var frog_hsv_channels = frog.CvtColor(ColorConversion.RgbToHsv).Split();
+                for (var i = 0; i < 3; ++i)
+                    frog_hsv_channels[i].ImWrite(dir + string.Format("frog {0}.png", hsv_names[i]));
+
+                frog_hsv_channels[1].Threshold(210, 255, ThresholdType.Binary).ImWrite(dir + "frog s th.png");
+                return true;
+            }
+            if (false)
+            {
+                MakeImagesForArticle();
+
+                return true;
+            }
+            if (false)
+            {
+                DetectBallsForArticle();
+                return true;
+            }
+            if (false)
+            {
+                var images = Enumerable.Range(0, 3).Select(i => string.Format("{0}.bmp", i)).Select(name => LoadBitmap(name).ToImage()).ToArray();
+                //var zeroImage = new int[images[0].GetLength(0), images[0].GetLength(1)];
+
+                var diff0_1 = images[0].Diff(images[1], 0, 0, 10);
+                var diff1_2 = images[1].Diff(images[2], 0, 0, 10);
+                diff0_1.ToBitmap().Save("diff s 0 1.bmp");
+                diff1_2.ToBitmap().Save("diff s 1 2.bmp");
+                diff0_1.And(diff1_2).ToBitmap().Save("diff s.bmp");
+
+                foreach (var t in new[] { 0, 10, 20, 50, 100 })
+                {
+                    for (var dy = 0; dy < 10; ++dy)
+                    {
+                        images[1].Diff(images[0], 0, dy, t).ToBitmap().Save(string.Format("diff 0 {0} {1}.bmp", dy, t));
+                    }
+                }
+                //foreach (var t in new[] { 0, 10, 20, 50, 100, 150 })
+                //{
+                //  images[1].Diff(zeroImage, 0, 0, t).ToBitmap().Save(string.Format("diff-z {0}.bmp", t));
+                //}
+                return true;
+            }
+            return false;
+        }
     }
     class Ball
     {
@@ -987,4 +1010,14 @@ namespace DrReiz.RoboGamer
     //    return System.Runtime.InteropServices.Marshal.ReadByte(mat.Data + mat.
     //  }
     //}
+    public class ScreenCheck
+    {
+        public ScreenCheck(string name, CheckPoint[] points)
+        {
+            this.Name = name;
+            this.Points = points;
+        }
+        public readonly string Name;
+        public readonly CheckPoint[] Points;
+    }
 }

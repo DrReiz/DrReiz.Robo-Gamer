@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrReiz.RoboGamer", "DrReiz.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrReiz.InputProxy", "DrReiz.InputProxy\DrReiz.InputProxy.csproj", "{900505CB-7035-48EC-9230-D2B203259933}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrReiz.RoboGamer.Wui", "DrReiz.RoboGamer.Wui\DrReiz.RoboGamer.Wui.csproj", "{1965BF84-5D2B-4E40-80D0-E3244E29CCAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{900505CB-7035-48EC-9230-D2B203259933}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{900505CB-7035-48EC-9230-D2B203259933}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{900505CB-7035-48EC-9230-D2B203259933}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1965BF84-5D2B-4E40-80D0-E3244E29CCAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1965BF84-5D2B-4E40-80D0-E3244E29CCAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1965BF84-5D2B-4E40-80D0-E3244E29CCAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1965BF84-5D2B-4E40-80D0-E3244E29CCAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
