@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DrReiz.RoboGamer
 {
-    public class VmClient
+    public class VmClient:IDisposable
     {
         public VmClient()
         {
@@ -34,5 +34,8 @@ namespace DrReiz.RoboGamer
             return DirectGamer.GetScreenImage(GameScreenRect);
         }
 
+        public void Dispose()
+        {
+        }
     }
 }

@@ -31,6 +31,14 @@ namespace DrReiz.RoboGamer
                             }
                         }
                         break;
+                    case "reset":
+                        {
+                            using (var client = new MouseClient(Zuma.VmIp))
+                            {
+                                client.Reset();
+                            }
+                        }
+                        break;
                     case "screenshot":
                         {
                             new VmClient().Screenshot().Save(context.HttpContext.Server.MapPath($"~/App_Data/{DateTime.UtcNow.Ticks}.png"));
@@ -73,6 +81,7 @@ namespace DrReiz.RoboGamer
                   ),
                   h.Div
                   (
+                      h.Input(h.type("button"), h.value("Reset"), new hdata { { "command", "reset" } }, h.onclick(";")),
                       h.Input(h.type("button"), h.value("Screenshot"), new hdata { { "command", "screenshot" } }, h.onclick(";"))
                   )
               )

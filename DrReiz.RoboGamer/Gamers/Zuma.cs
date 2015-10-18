@@ -7,6 +7,7 @@ using OpenCvSharp;
 using OpenCvSharp.CPlusPlus;
 using OpenCvSharp.Extensions;
 using Point = System.Drawing.Point;
+using NitroBolt.Functional;
 
 namespace DrReiz.RoboGamer
 {
@@ -14,14 +15,87 @@ namespace DrReiz.RoboGamer
     {
         public static readonly string VmIp = "169.254.200.106";
 
-        //public static readonly System.Drawing.Rectangle VmRect = new System.Drawing.Rectangle();
+        public static void Execute()
+        {
+            using (var vmClient = new VmClient())
+            using (var mouseClient = new MouseClient(VmIp))
+            {
+                var printIndex = new Dictionary<ScreenPrint, int>();
+
+                for (;;)
+                {
+                    var bmp = GetScreenImage(vmClient.GameScreenRect);
+                    var img = bmp.ToIplImage();
+                    var vBmp = new Mat(img, false).CvtColor(ColorConversion.RgbToHsv).Split()[2];
+                    //vBmp.ToBitmap().Save("v.png");
+                    //vBmp.Resize(new OpenCvSharp.CPlusPlus.Size(16, 16)).ToBitmap().Save("v.16.png");
+                    //vBmp.Resize(new OpenCvSharp.CPlusPlus.Size(128, 128)).ToBitmap().Save("v.128.png");
+
+                    var small = vBmp.Resize(new OpenCvSharp.CPlusPlus.Size(4, 4));
+                    //Console.WriteLine(small.ElemSize());
+                    //Console.WriteLine(vBmp.ElemSize());
+                    //return;
+                    var print = new ScreenPrint(ColorCut(ToByteArray(small)));
+                    var index = printIndex.FindValue(print);
+                    if (index == null)
+                    {
+                        index = (printIndex.Count > 0 ? printIndex.Values.Max() : 0) + 1;
+                        printIndex[print] = index.Value;
+                    }
+                    Console.WriteLine(index);
+
+                    GC.Collect();
+                    System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+                }
+            }
+        }
+        class ScreenPrint
+        {
+            public ScreenPrint(byte[] print)
+            {
+                this.Print = print;
+            }
+            public readonly byte[] Print;
+
+            public override int GetHashCode()
+            {
+                return Print[0].GetHashCode() ^ Print[1].GetHashCode() ^ Print[Print.Length - 2].GetHashCode() ^ Print[Print.Length - 1].GetHashCode();
+            }
+            public override bool Equals(object obj)
+            {
+                var v = obj as ScreenPrint;
+                if (v == null)
+                    return false;
+                return Print.SequenceEqual(v.Print);
+            }
+        }
+        static byte[] ColorCut(byte[] bytes)
+        {
+            return bytes.Select(b => (byte)(b >> 4)).ToArray();
+        }
+        static byte[] ToByteArray(Mat m)
+        {
+            var result = new byte[m.Width * m.Height];
+            for (var y = 0; y < m.Height; ++y)
+                for(var x = 0; x < m.Width; ++x)
+                {
+                    result[y * m.Width + x] = m.Get<byte>(x, y);
+                }
+            return result;
+            //var buffer = new byte[m.Width, m.Height];
+            //m.GetArray(m.Width, m.Height, buffer);
+            //var result = new byte[m.Width * m.Height];
+            //Buffer.BlockCopy(buffer, 0, result, 0, result.Length);
+            //return result;
+        }
+        
 
         static readonly string[] hsv_names = new[] { "h", "s", "v" };
-        public static void Execute()
+        public static void Execute2()
         {
             var frogRect = new Rectangle(320, 218, 150, 150);
 
-            if (Other(frogRect))
+            if (OtherOperation(frogRect))
                 return;
 
             var screenChecks = ScreenChecks();
@@ -816,7 +890,7 @@ namespace DrReiz.RoboGamer
             return mask;
         }
 
-        public static bool Other(System.Drawing.Rectangle frogRect)
+        public static bool OtherOperation(System.Drawing.Rectangle frogRect)
         {
             if (false)
             {
