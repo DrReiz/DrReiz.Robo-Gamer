@@ -73,6 +73,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Gamers\Zuma.Meta.cs" />
     <Compile Include="VmClient.cs" />
     <None Include="Gamers\AlienWars.cs" />
     <Compile Include="Gamers\DirectxBot.cs" />

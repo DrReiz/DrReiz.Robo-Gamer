@@ -22,6 +22,8 @@ namespace DrReiz.RoboGamer
             {
                 var printIndex = new Dictionary<ScreenPrint, int>();
 
+                int? prev = null;
+
                 for (;;)
                 {
                     var bmp = GetScreenImage(vmClient.GameScreenRect);
@@ -42,10 +44,12 @@ namespace DrReiz.RoboGamer
                         index = (printIndex.Count > 0 ? printIndex.Values.Max() : 0) + 1;
                         printIndex[print] = index.Value;
                     }
-                    Console.WriteLine(index);
+                    if (prev != index)
+                        Console.WriteLine(index);
+                    prev = index;
 
                     GC.Collect();
-                    System.Threading.Thread.Sleep(TimeSpan.FromSeconds(1));
+                    System.Threading.Thread.Sleep(TimeSpan.FromSeconds(0.1));
                 }
             }
         }
