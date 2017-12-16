@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using Shipwreck.Phash;
 
 namespace DrReiz.GumballGamer
 {
@@ -19,6 +20,18 @@ namespace DrReiz.GumballGamer
         //https://stackoverflow.com/questions/7527459/android-device-screen-size
         static void Main(string[] args)
         {
+            MonitorScreenshotsByAdb();
+            return;
+            var screenshot1 = AdbScreenCapture();
+            System.IO.File.WriteAllBytes("screen-capture.png", screenshot1);
+            return;
+            MonitorScreenshots();
+            return;
+            PhashExecuting();
+            return;
+            SaveMazeCellImages();
+            return;
+
             var vm_title = "BlueStacks";
 
             var handle = DirectGamer.FindWindow(null, vm_title);
@@ -109,6 +122,46 @@ namespace DrReiz.GumballGamer
             Shell("input keyevent 4");//back кнопка
             Shell("input keyevent 4");
         }
+        //https://blog.shvetsov.com/2013/02/grab-android-screenshot-to-computer-via.html
+        static byte[] AdbScreenCapture()
+        {
+            var command = "shell:screencap -p";
+
+            var port = 5037;
+            //var port = 5555;
+            using (var client = new TcpClient("127.0.0.1", port))
+            {
+                using (var stream = client.GetStream())
+                {
+                    SendToAdb(stream, "host:transport:emulator-5554", isPayload: false);
+                    //SendToAdb(stream, $"shell:{command}", isPayload: true);
+
+                    var fullCommand = $"{command.Length:x4}{command}";
+                    Console.WriteLine(fullCommand);
+                    var buf = Encoding.UTF8.GetBytes(fullCommand);
+                    stream.Write(buf, 0, buf.Length);
+                    var okay = ReceiveFromAdb(stream, length: 4);
+                    Console.WriteLine($">>{okay.Length} {okay}");
+                    if (okay.Substring(0, 4) != "OKAY")
+                        throw new Exception($"error adb receive: {okay}");
+
+                    return AdbApi.ReplaceDAToA(AdbApi.ReadAll(stream));
+                    //var prefix = ReceiveFromAdb(stream, 4);
+                    //if (prefix.Length == 0)
+                    //    return null;
+                    //Console.WriteLine($">>{prefix.Length} {prefix}");
+                    //var length = Convert.ToInt32(prefix);
+
+                    //var answerBuf = new byte[length];
+                    //int len = stream.Read(answerBuf, 0, answerBuf.Length);
+                    //Console.WriteLine(len);
+                    
+                    //return answerBuf;
+                }
+            }
+
+        }
+
         static void Shell(string command)
         {
             var port = 5037;
@@ -185,6 +238,178 @@ namespace DrReiz.GumballGamer
             Console.WriteLine($">>{prefix.Length} {prefix}");
             var len = Convert.ToInt32(prefix);
             return ReceiveFromAdb(stream, len);
+        }
+
+        static void MonitorScreenshotsByAdb()
+        {
+            var outDir = @"t:\Data\Gumball\Screenshots";
+            var device = "emulator-5554";
+
+            //using (var client = new AdbClient("emulator-5554"))
+            if (true)
+            {
+                var hashes = new Dictionary<Shipwreck.Phash.Digest, int>(new DigestComparer());
+                Shipwreck.Phash.Digest prevHash = null;
+
+                for (var i = 0; ; i++)
+                {
+
+                    var screenshot = AdbScreenCapture(device);
+
+                    var hash = ComputeDigest(screenshot);
+                    //var isOther = prevHash == null || Shipwreck.Phash.ImagePhash.GetCrossCorrelation(prevHash, hash) < 1;
+                    var isOther = prevHash == null || hashes.Keys.All(_hash => ImagePhash.GetCrossCorrelation(_hash, hash) < 1);
+                    if (isOther)
+                        screenshot.Save(System.IO.Path.Combine(outDir, $"{DateTime.UtcNow:yyMMdd.HHmmss}.png"));
+                    //System.IO.File.WriteAllBytes(System.IO.Path.Combine(outDir, $"{DateTime.UtcNow:yyMMdd.HHmmss}.png"), stream.ToArray());
+                    Console.WriteLine($"{i:d4} {hash} - {(isOther ? "saved" : "skipped")}");
+                    prevHash = hash;
+                    hashes[hash] = (hashes.ContainsKey(hash) ? hashes[hash] : 0) + 1;
+
+                    System.Threading.Thread.Sleep(TimeSpan.FromSeconds(0.1));
+                }
+
+            }
+        }
+        static Bitmap AdbScreenCapture(string device)
+        {
+            using (var client = new AdbClient("emulator-5554"))
+            {
+                return client.CaptureScreenshot();
+            }
+        }
+
+        static void MonitorScreenshots()
+        {
+            var outDir = @"t:\Data\Gumball\Screenshots";
+
+
+            var vm_title = "BlueStacks";
+
+            var handle = DirectGamer.FindWindow(null, vm_title);
+            if (handle == IntPtr.Zero)
+                throw new Exception("Окно не найдено");
+
+            DirectGamer.RECT rect;
+            DirectGamer.GetWindowRect(handle, out rect);
+            Console.WriteLine($"{rect.Right - rect.Left} {rect.Bottom - rect.Top}");
+
+            var hashes = new Dictionary<Shipwreck.Phash.Digest, int>(new DigestComparer());
+            Shipwreck.Phash.Digest prevHash = null;
+
+            for (var i = 0; ;i++ )
+            {
+
+                var screenshot = DirectGamer.GetScreenImage(new System.Drawing.Rectangle(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top));
+
+                var hash = ComputeDigest(screenshot);
+                //var isOther = prevHash == null || Shipwreck.Phash.ImagePhash.GetCrossCorrelation(prevHash, hash) < 1;
+                var isOther = prevHash == null || hashes.Keys.All(_hash => ImagePhash.GetCrossCorrelation(_hash, hash) < 1);
+                if (isOther)
+                    screenshot.Save(System.IO.Path.Combine(outDir, $"{DateTime.UtcNow:yyMMdd.HHmmss}.png"));
+                    //System.IO.File.WriteAllBytes(System.IO.Path.Combine(outDir, $"{DateTime.UtcNow:yyMMdd.HHmmss}.png"), stream.ToArray());
+                Console.WriteLine($"{i:d4} {hash} - {(isOther ? "saved" : "skipped")}");
+                prevHash = hash;
+                hashes[hash] = (hashes.ContainsKey(hash) ? hashes[hash] : 0) + 1;
+
+                System.Threading.Thread.Sleep(TimeSpan.FromSeconds(0.1));
+            }
+
+        }
+
+        private static Digest ComputeDigest(Bitmap screenshot)
+        {
+            var stream = new System.IO.MemoryStream();
+            screenshot.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+            stream.Seek(0, System.IO.SeekOrigin.Begin);
+
+            return Shipwreck.Phash.ImagePhash.ComputeDigest(stream);
+        }
+
+        class DigestComparer : IEqualityComparer<Shipwreck.Phash.Digest>
+        {
+            public bool Equals(Digest x, Digest y)
+            {
+                return x.Coefficents.SequenceEqual(y.Coefficents);
+            }
+
+            public int GetHashCode(Digest obj)
+            {
+                return obj.Coefficents.Aggregate(0, (a, b) => a ^ b);
+            }
+        }
+
+        static void SaveMazeCellImages()
+        {
+            var screenshot = Image.FromFile("gumballs.screenshot.png");
+
+            var screenWidth = 900;
+            var screenHeight = 1600;
+            var headerHeight = 40;
+            var footerHeight = 40;
+
+            var cellWidth = 167;
+            //var cellHeight = 180;
+            var cellHeight = 156;
+            var mazeX = 30;
+            var mazeY = 277;
+
+            if (true)
+            {
+                var dx = screenshot.Width / (float)screenWidth;
+                var dy = (screenshot.Height - headerHeight - footerHeight) / (float)screenHeight;
+
+                var image = new Bitmap(screenshot);
+                using (var g = Graphics.FromImage(image))
+                {
+                    for (var yi = 0; yi < 6; ++yi)
+                    {
+                        for (var xi = 0; xi < 5; ++xi)
+                        {
+                            var x1 = mazeX + xi * cellWidth;
+                            var y1 = mazeY + yi * cellHeight;
+                            var x2 = x1 + cellWidth;
+                            var y2 = y1 + cellHeight;
+                            var sx1 = x1 * dx;
+                            var sx2 = x2 * dx;
+                            var sy1 = (y1 * dy + headerHeight);
+                            var sy2 = y2 * dy + headerHeight;
+                            if (sx2 >= image.Width)
+                                sx2 = image.Width;
+                            if (sy2 >= image.Height)
+                                sy2 = image.Height;
+
+                            image.Clone(new RectangleF(sx1, sy1, sx2 - sx1, sy2 - sy1), image.PixelFormat).Save($"cells/{xi}{yi}.png");
+                        }
+                    }
+
+                    //var pen = new Pen(Color.Red);
+
+                    //Action<Pen, float, float, float, float> drawLine = (p, x1, y1, x2, y2) => g.DrawLine(p, x1 * dx, y1 * dy + headerHeight, x2 * dx, y2 * dy + headerHeight);
+
+                    //for (var y = 0; y <= 6; ++y)
+                    //    drawLine(pen, mazeX, mazeY + y * cellHeight, mazeX + cellWidth * 5, mazeY + y * cellHeight);
+                    //for (var x = 0; x <= 5; ++x)
+                    //    drawLine(pen, mazeX + x * cellWidth, mazeY, mazeX + x * cellWidth, mazeY + 6 * cellHeight);
+                }
+                image.Save("gumballs.lines.png");
+            }
+        }
+        static void PhashExecuting()
+        {
+            var filenames = System.IO.Directory.GetFiles("Cells");
+
+            var hashes = filenames.Select(filename => new { filename, hash = Shipwreck.Phash.ImagePhash.ComputeDigest(filename) }).ToArray();
+            foreach (var hash in hashes)
+            {
+                Console.WriteLine(hash.filename);
+                foreach (var correlation in hashes.Select(otherHash => new { otherHash.filename, D = Shipwreck.Phash.ImagePhash.GetCrossCorrelation(hash.hash, otherHash.hash) })
+                    .OrderByDescending(_cor => _cor.D)
+                    .Take(5))
+                {
+                    Console.WriteLine($"  {correlation.D:f2} {correlation.filename}");
+                }
+            }
         }
     }
 }
