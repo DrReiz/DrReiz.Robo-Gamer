@@ -64,3 +64,12 @@
         text-overflow: ellipsis;
     }
 }
+
+.maze-cell{
+    text-align:center;
+    display:table;
+}
+.maze-text {
+    display: table-cell;
+    vertical-align: middle;
+}
