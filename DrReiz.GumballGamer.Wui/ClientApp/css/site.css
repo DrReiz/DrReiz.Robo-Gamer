@@ -19,14 +19,14 @@
     z-index: 1;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 2767px) {
     /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
     body {
         padding-top: 50px;
     }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 2768px) {
     /* On small screens, convert the nav menu to a vertical sidebar */
     .main-nav {
         height: 100%;

@@ -23,7 +23,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
 
         let visionFrame = maze.visionFrames[0];
 
-        let resizeK = 0.5;
+        let resizeK = 0.4;
         let frame = MazeView.ResizeFrame(maze.frame, resizeK);
         let areas = MazeView.ResizeAreas(visionFrame.areas, resizeK);
         let grid = MazeView.ResizeRects(MazeView.Grid(maze.frame.width, maze.frame.height, 200), resizeK);
@@ -33,14 +33,14 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
             <h1>Maze</h1>
             <div onClick={() => { this.toggleGridDisplay() }}>grid</div>
             <div style={{ display: 'table-row' }}>
-                <div style={{ width: maze.frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%' }}>AI-Gamer Vision
+                <div style={{ width: frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%' }}>AI-Gamer Vision
                 </div>
                 <div style={{ width: '20px', display: 'table-cell' }}></div>
-                <div style={{ width: maze.frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%'}}>AI-Gamer Perception</div>
+                <div style={{ width: frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%'}}>AI-Gamer Perception</div>
             </div>
             <div style={{ display: 'table-row' }}>
-                <div style={{ width: maze.frame.width, height: maze.frame.height, border: '0px solid black', display: 'table-cell', position: 'relative', color:'lightblue' }}>
-                    <img style={{ width: maze.frame.width, height: maze.frame.height, position: 'absolute' }} src={'data/' + this.state.img_name} / >
+                <div style={{ width: frame.width, height: frame.height, border: '0px solid black', display: 'table-cell', position: 'relative', color:'lightblue' }}>
+                    <img style={{ width: frame.width, height: frame.height, position: 'absolute' }} src={'data/' + this.state.img_name} / >
                     {
                       this.state.is_grid_display ? 
                       grid.map((area,k) =>
@@ -57,7 +57,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                     }
                 </div>
                 <div style={{ width: '20px', display: 'table-cell' }}></div>
-                <div style={{ width: maze.frame.width, height: maze.frame.height, border: '1px solid black', display: 'table-cell', position:'relative', color:'green' }}>
+                <div style={{ width: frame.width, height: frame.height, border: '1px solid black', display: 'table-cell', position:'relative', color:'green' }}>
                     {areas.map((area, k) =>
                         <div className="maze-cell" style={{ left: area.x, top: area.y, width: area.width, height: area.height, position: 'absolute', border: (MazeView.IsFloat(area.name) ? '2px solid black' : '0.5px solid darkgray'), zIndex: MazeView.IsFloat(area.name) ? 10 : 0 }} key={k}>
                             <div className="maze-text">{area.value}</div>
