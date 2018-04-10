@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router';
 interface MazeState {
     is_grid_display: boolean;
     selectedVisionShot: VisionShot;
+    visionShots: VisionShot[];
 }
 interface VisionShot {
     name: string;
@@ -22,13 +23,25 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
             selectedVisionShot: {
                 name: "171213.233229",
                 filename: "171213.233229.png",
-            }
-          };
+            },
+            visionShots:[],
+            };
+
+        this.load();
+    }
+
+    async load() {
+        let response = await fetch('visionShots');
+        let visionShotFilenames = (await response.json()) as string[];
+        let visionShots = visionShotFilenames.map(filename => ({ name: filename.replace(".png", ""), filename: filename }));
+
+        this.setState({ visionShots: visionShots });
     }
 
     public render() {
-        let visionShotFilenames = ["171213.233408.png", "171213.233335.png", "171213.233229.png"];
-        let visionShots = visionShotFilenames.map(filename => ({ name: filename.replace(".png", ""), filename: filename }));
+        //let visionShotFilenames = ["171213.233408.png", "171213.233335.png", "171213.233229.png"];
+        //let visionShots = visionShotFilenames.map(filename => ({ name: filename.replace(".png", ""), filename: filename }));
+        let visionShots = this.state.visionShots;
 
         let maze = MazeView.Maze;
 
