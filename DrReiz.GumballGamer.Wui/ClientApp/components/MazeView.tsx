@@ -72,6 +72,8 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                         </div>
                         <div style={{ width: '20px', display: 'table-cell' }}></div>
                         <div style={{ width: frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%'}}>AI-Gamer Perception</div>
+                        <div style={{ width: '20px', display: 'table-cell' }}></div>
+                        <div style={{ width: frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%' }}>AI-Gamer Mind</div>
                     </div>
                     <div style={{ display: 'table-row' }}>
                         <div style={{ width: frame.width, height: frame.height, border: '0px solid black', display: 'table-cell', position: 'relative', color: 'lightblue' }}>
