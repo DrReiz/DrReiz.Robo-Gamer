@@ -21,8 +21,8 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
             //img_name: "171213.233335.png",
             //img_name: "171213.233408.png",
             selectedVisionShot: {
-                name: "171213.233229",
-                filename: "171213.233229.png",
+                name: "171213.233315",
+                filename: "171213.233315.png",
             },
             visionShots:[],
             };
@@ -87,8 +87,8 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                                :null
                             }
                             {areas.map((area, k) =>
-                                <div className="maze-cell" style={{ left: area.x, top: area.y, width: area.width, height: area.height, position: 'absolute', border: (MazeView.IsFloat(area.name) ? '2px solid red' : '0.5px solid lightpink'), zIndex: MazeView.IsFloat(area.name)? 10 : 0 }} key={k}>
-                                    <div className="maze-text">{area.name}</div>
+                                <div className="maze-cell" style={{ left: area.x, top: area.y, width: area.width, maxWidth: area.width, height: area.height, position: 'absolute', border: (MazeView.IsFloat(area.name) ? '2px solid red' : '0.5px solid lightpink'), zIndex: MazeView.IsFloat(area.name) ? 10 : 0 }} key={k}>
+                                    <div className="maze-text" style={{ left: area.x, top: area.y, width: area.width, maxWidth: area.width, height: area.height }} title={area.value} > { area.name }</div>
                                 </div>
                                )
                             }
@@ -96,8 +96,8 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                         <div style={{ width: '20px', display: 'table-cell' }}></div>
                         <div style={{ width: frame.width, height: frame.height, border: '1px solid black', display: 'table-cell', position:'relative', color:'green' }}>
                             {areas.map((area, k) =>
-                                <div className="maze-cell" style={{ left: area.x, top: area.y, width: area.width, height: area.height, position: 'absolute', border: (MazeView.IsFloat(area.name) ? '2px solid black' : '0.5px solid darkgray'), zIndex: MazeView.IsFloat(area.name) ? 10 : 0 }} key={k}>
-                                    <div className="maze-text">{area.value}</div>
+                                <div className="maze-cell" style={{ left: area.x, top: area.y, width: area.width, maxWidth: area.width, height: area.height, position: 'absolute', border: (MazeView.IsFloat(area.name) ? '2px solid black' : '0.5px solid darkgray'), zIndex: MazeView.IsFloat(area.name) ? 10 : 0 }} key={k}>
+                                    <div className="maze-text" style={{ left: area.x, top: area.y, width: area.width, maxWidth: area.width, height: area.height }} title={area.value}>{area.value}</div>
                                 </div>
                                )
                             }
@@ -254,6 +254,15 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                     shotName: '171213.233229',
                     areas: [
                         { x: 30, y: 540, width: 900 - 60, height: 1040 - 540, name: 'popup', value: 'disconnect' },
+
+                    ]
+                },
+                {
+                    shotName: '171213.233315',
+                    areas: [
+                        { x: 200 + 10, y: 1600 - 100, width: 160 - 20, height: 100, name: 'left-button', value: 'alchemy' },
+                        { x: 375 + 10, y: 1600 - 100, width: 160 - 20, height: 100, name: 'center-button', value: 'gumbals' },
+                        { x: 540 + 20, y: 1600 - 100, width: 160 - 20, height: 100, name: 'right-button', value: 'shop' },
 
                     ]
                 },

@@ -65,11 +65,16 @@
     }
 }
 
-.maze-cell{
-    text-align:center;
-    display:table;
+.maze-cell {
+    text-align: center;
+    display: table;
+
 }
 .maze-text {
     display: table-cell;
     vertical-align: middle;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
