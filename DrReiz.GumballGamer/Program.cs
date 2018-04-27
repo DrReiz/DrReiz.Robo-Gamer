@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Shipwreck.Phash;
+using NitroBolt.Functional;
 
 namespace DrReiz.GumballGamer
 {
@@ -20,6 +21,8 @@ namespace DrReiz.GumballGamer
         //https://stackoverflow.com/questions/7527459/android-device-screen-size
         static void Main(string[] args)
         {
+            Perception();
+            return;
             MonitorScreenshotsByAdb();
             return;
             var screenshot1 = AdbScreenCapture();
@@ -122,6 +125,58 @@ namespace DrReiz.GumballGamer
             Shell("input keyevent 4");//back кнопка
             Shell("input keyevent 4");
         }
+
+        static void Perception()
+        {
+            var area = new { x = 200 + 10, y = 1600 - 120, width = 160 - 20, height = 100 };
+            var rect = new Rectangle(area.x, area.y, area.width, area.height);
+
+
+            //var areaBitmap = bitmap.Clone(rect, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            //areaBitmap.Save("area.png");
+
+            var rnd = new Random();
+
+            var rs = Enumerable.Range(0, 10).Select(i => rnd.Next(rect.Width * rect.Height * 3)).ToArray();
+
+            var etalon = Pick(@"p:\Projects\DrReiz.Robo-Gamer\DrReiz.GumballGamer.Wui\wwwroot\data\171213.233315.png", rect, rs);
+            foreach (var imageFilename in System.IO.Directory.GetFiles(@"t:\Data\Gumball\Screenshots"))
+            {
+                var pick = Pick(imageFilename, rect, rs);
+                var difs = etalon.Zip(pick, (e, p) => Math.Abs(e - p));
+                Console.WriteLine(difs.Select(d => d.ToString()).JoinToString(" "));
+            }
+
+        }
+        static int[] Pick(string imageFilename, Rectangle rect, int[] rs)
+        {
+            //var image = System.IO.File.ReadAllBytes(@"p:\Projects\DrReiz.Robo-Gamer\DrReiz.GumballGamer.Wui\wwwroot\data\171213.233315.png");
+            var image = System.IO.File.ReadAllBytes(imageFilename);
+            var bitmap = (Bitmap)System.Drawing.Bitmap.FromStream(new System.IO.MemoryStream(image));
+
+            var bitmapData = bitmap.LockBits(rect, System.Drawing.Imaging.ImageLockMode.ReadOnly, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            try
+            {
+                return rs.Select(r =>
+                {
+                    var y = r / 3 / rect.Width;
+                    var x = r / 3 - y * rect.Width;
+                    var plane = r % 3;
+
+                    var p = bitmapData.Scan0 + bitmapData.Stride * y + 4 * x + plane;
+                    var b = System.Runtime.InteropServices.Marshal.ReadByte(p);
+                    return (int)b;
+                })
+                .ToArray();
+            }
+            finally
+            {
+                bitmap.UnlockBits(bitmapData);
+            }
+
+        }
+
+
         //https://blog.shvetsov.com/2013/02/grab-android-screenshot-to-computer-via.html
         static byte[] AdbScreenCapture()
         {

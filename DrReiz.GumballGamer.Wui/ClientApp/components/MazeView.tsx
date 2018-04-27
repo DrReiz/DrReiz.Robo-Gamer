@@ -260,9 +260,9 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                 {
                     shotName: '171213.233315',
                     areas: [
-                        { x: 200 + 10, y: 1600 - 100, width: 160 - 20, height: 100, name: 'left-button', value: 'alchemy' },
-                        { x: 375 + 10, y: 1600 - 100, width: 160 - 20, height: 100, name: 'center-button', value: 'gumbals' },
-                        { x: 540 + 20, y: 1600 - 100, width: 160 - 20, height: 100, name: 'right-button', value: 'shop' },
+                        { x: 200 + 10, y: 1600 - 120, width: 160 - 20, height: 100, name: 'left-button', value: 'alchemy' },
+                        { x: 375 + 10, y: 1600 - 120, width: 160 - 20, height: 100, name: 'center-button', value: 'gumbals' },
+                        { x: 540 + 20, y: 1600 - 120, width: 160 - 20, height: 100, name: 'right-button', value: 'shop' },
 
                     ]
                 },
