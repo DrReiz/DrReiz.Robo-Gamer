@@ -5,6 +5,7 @@ interface MazeState {
     is_grid_display: boolean;
     selectedVisionShot: VisionShot;
     visionShots: VisionShot[];
+    perception: Perception;
 }
 interface VisionShot {
     name: string;
@@ -16,20 +17,26 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
     constructor() {
         super();
         this.state =
-          {
-            is_grid_display: false,
-            //img_name: "171213.233335.png",
-            //img_name: "171213.233408.png",
-            selectedVisionShot: {
-                name: "171213.233315",
-                filename: "171213.233315.png",
-            },
-            visionShots:[],
+            {
+                is_grid_display: false,
+                //img_name: "171213.233335.png",
+                //img_name: "171213.233408.png",
+                selectedVisionShot: {
+                    name: "171213.233315",
+                    filename: "171213.233315.png",
+                },
+                visionShots: [],
+                perception: {
+                    frame: {
+                        x: 0, y: 0, width: 900, height: 1600
+                    },
+                    perceptionShots: []
+                }
             };
 
         this.load();
+        this.loadPerception();
 
-        console.log(JSON.stringify(MazeView.Maze));
     }
 
     async load() {
@@ -39,13 +46,18 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
 
         this.setState({ visionShots: visionShots });
     }
+    async loadPerception() {
+        let response = await fetch('data/perception.json');
+        let perception = (await response.json()) as Perception;
+        this.setState({ perception:perception });
+    }
 
     public render() {
         //let visionShotFilenames = ["171213.233408.png", "171213.233335.png", "171213.233229.png"];
         //let visionShots = visionShotFilenames.map(filename => ({ name: filename.replace(".png", ""), filename: filename }));
         let visionShots = this.state.visionShots;
 
-        let maze = MazeView.Maze;
+        let maze = this.state.perception;
 
         let visionFrame = maze.perceptionShots.find(shot => shot.shotName == this.state.selectedVisionShot.name);
 
@@ -166,110 +178,6 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
     //        currentCount: this.state.currentCount + 1
     //    });
     //}
-    static Maze: Maze = {
-        frame: {
-            x: 0, y: 0, width: 900, height: 1600
-        },
-        perceptionShots:
-            [
-                {
-                    shotName: '171213.233408',
-                    areas: [
-                        { x: 30, y: 280 + 20, width: 170, height: 156, name: 'cell-0-0', value: 'pit' },
-                        { x: 200, y: 280 + 20, width: 170, height: 156, name: 'cell-1-0', value: 'den' },
-                        { x: 370, y: 280 + 20, width: 170, height: 156, name: 'cell-2-0', value: 'den' },
-                        { x: 540, y: 280 - 30, width: 170, height: 156, name: 'float-3-0', value: 'enemy' },
-                        { x: 710, y: 280, width: 170, height: 156, name: 'cell-4-0', value: 'block' },
-
-                        { x: 30, y: 436 + 20, width: 170, height: 156, name: 'cell-0-1', value: 'empty' },
-                        { x: 200, y: 436 + 20, width: 170, height: 156, name: 'cell-1-1', value: 'empty' },
-                        { x: 370, y: 436 + 20, width: 170, height: 156, name: 'cell-2-1', value: 'empty' },
-                        { x: 540, y: 436 + 20, width: 170, height: 156, name: 'cell-3-1', value: 'bee-tree' },
-                        { x: 710, y: 436, width: 170, height: 156, name: 'cell-4-1', value: 'block' },
-
-                        { x: 30, y: 592 + 20, width: 170, height: 156, name: 'cell-0-2', value: 'tree' },
-                        { x: 200, y: 592 + 20, width: 170, height: 156, name: 'cell-1-2', value: 'empty' },
-                        { x: 370, y: 592 + 20, width: 170, height: 156, name: 'cell-2-2', value: 'empty' },
-                        { x: 540, y: 592 - 30, width: 170, height: 156, name: 'float-3-2', value: 'key' },
-                        { x: 710, y: 592 - 30, width: 170, height: 156, name: 'float-4-2', value: 'enemy' },
-
-                        { x: 30, y: 748 + 20, width: 170, height: 156, name: 'cell-0-3', value: 'door' },
-                        { x: 200, y: 748 + 20, width: 170, height: 156, name: 'cell-1-3', value: 'pit' },
-                        { x: 370, y: 748 + 20, width: 170, height: 156, name: 'cell-2-3', value: 'empty' },
-                        { x: 540, y: 748 + 20, width: 170, height: 156, name: 'cell-3-3', value: 'empty' },
-                        { x: 710, y: 748, width: 170, height: 156, name: 'cell-3-3', value: 'block' },
-
-                        { x: 30, y: 904 + 20, width: 170, height: 156, name: 'cell-0-4', value: 'empty' },
-                        { x: 200, y: 904 + 20, width: 170, height: 156, name: 'cell-1-4', value: 'empty' },
-                        { x: 370, y: 904 + 20, width: 170, height: 156, name: 'cell-2-4', value: 'empty' },
-                        { x: 540, y: 904 - 30, width: 170, height: 156, name: 'float-3-4', value: 'EP' },
-                        { x: 710, y: 904, width: 170, height: 156, name: 'cell-4-4', value: 'slab' },
-
-                        { x: 30, y: 1060 + 20, width: 170, height: 156 - 20, name: 'cell-0-4', value: 'empty' },
-                        { x: 200, y: 1060 - 30, width: 170, height: 156, name: 'float-1-5', value: 'arrow' },
-                        { x: 370, y: 1060 - 30, width: 170, height: 156, name: 'float-2-5', value: 'mana' },
-                        { x: 540, y: 1060 + 20, width: 170, height: 156 - 20, name: 'cell-3-5', value: 'empty' },
-                        { x: 710, y: 1060, width: 170, height: 156, name: 'cell-4-5', value: 'slab' },
-                    ]
-                },
-                {
-                    shotName: '171213.233335',
-                    areas: [
-                        { x: 30, y: 280, width: 170, height: 156, name: 'cell-0-0', value: 'dark-slab' },
-                        { x: 200, y: 280, width: 170, height: 156, name: 'cell-1-0', value: 'dark-slab' },
-                        { x: 370, y: 280, width: 170, height: 156, name: 'cell-2-0', value: 'dark-slab' },
-                        { x: 540, y: 280, width: 170, height: 156, name: 'cell-3-0', value: 'dark-slab' },
-                        { x: 710, y: 280, width: 170, height: 156, name: 'cell-4-0', value: 'dark-slab' },
-
-                        { x: 30, y: 436, width: 170, height: 156, name: 'cell-0-1', value: 'light-slab' },
-                        { x: 200, y: 436, width: 170, height: 156, name: 'cell-1-1', value: 'dark-slab' },
-                        { x: 370, y: 436, width: 170, height: 156, name: 'cell-2-1', value: 'dark-slab' },
-                        { x: 540, y: 436, width: 170, height: 156, name: 'cell-3-1', value: 'dark-slab' },
-                        { x: 710, y: 436, width: 170, height: 156, name: 'cell-4-1', value: 'dark-slab' },
-
-                        { x: 30, y: 592 + 20, width: 170, height: 156, name: 'cell-0-2', value: 'tree' },
-                        { x: 200, y: 592, width: 170, height: 156, name: 'cell-1-2', value: 'light-slab' },
-                        { x: 370, y: 592, width: 170, height: 156, name: 'cell-2-2', value: 'dark-slab' },
-                        { x: 540, y: 592, width: 170, height: 156, name: 'cell-3-2', value: 'dark-slab' },
-                        { x: 710, y: 592, width: 170, height: 156, name: 'cell-4-2', value: 'dark-slab' },
-
-                        { x: 30, y: 748 + 20, width: 170, height: 156, name: 'cell-0-3', value: 'door' },
-                        { x: 200, y: 748, width: 170, height: 156, name: 'cell-1-3', value: 'light-slab' },
-                        { x: 370, y: 748, width: 170, height: 156, name: 'cell-2-3', value: 'dark-slab' },
-                        { x: 540, y: 748, width: 170, height: 156, name: 'cell-3-3', value: 'dark-slab' },
-                        { x: 710, y: 748, width: 170, height: 156, name: 'cell-3-3', value: 'dark-slab' },
-
-                        { x: 30, y: 904, width: 170, height: 156, name: 'cell-0-4', value: 'light-slab' },
-                        { x: 200, y: 904, width: 170, height: 156, name: 'cell-1-4', value: 'dark-slab' },
-                        { x: 370, y: 904, width: 170, height: 156, name: 'cell-2-4', value: 'dark-slab' },
-                        { x: 540, y: 904, width: 170, height: 156, name: 'cell-3-4', value: 'dark-slab' },
-                        { x: 710, y: 904, width: 170, height: 156, name: 'cell-4-4', value: 'dark-slab' },
-
-                        { x: 30, y: 1060, width: 170, height: 156, name: 'cell-0-4', value: 'dark-slab' },
-                        { x: 200, y: 1060 + 20, width: 170, height: 156 - 20, name: 'cell-1-5', value: 'arrow' },
-                        { x: 370, y: 1060, width: 170, height: 156, name: 'cell-2-5', value: 'dark-slab' },
-                        { x: 540, y: 1060, width: 170, height: 156, name: 'cell-3-5', value: 'dark-slab' },
-                        { x: 710, y: 1060, width: 170, height: 156, name: 'cell-4-5', value: 'dark-slab' },
-                    ]
-                },
-                {
-                    shotName: '171213.233229',
-                    areas: [
-                        { x: 30, y: 540, width: 900 - 60, height: 1040 - 540, name: 'popup', value: 'disconnect' },
-
-                    ]
-                },
-                {
-                    shotName: '171213.233315',
-                    areas: [
-                        { x: 200 + 10, y: 1600 - 120, width: 160 - 20, height: 100, name: 'left-button', value: 'alchemy' },
-                        { x: 375 + 10, y: 1600 - 120, width: 160 - 20, height: 100, name: 'center-button', value: 'gumbals' },
-                        { x: 540 + 20, y: 1600 - 120, width: 160 - 20, height: 100, name: 'right-button', value: 'shop' },
-
-                    ]
-                },
-            ]
-    };
 }
 
 interface Rect {
@@ -279,7 +187,7 @@ interface Rect {
     height: number;
 }
 
-interface Maze {
+interface Perception {
     frame: Rect;
     perceptionShots: PerceptionShot[];
 }
