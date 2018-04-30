@@ -22,7 +22,7 @@ namespace DrReiz.GumballGamer.Wui.Controllers
         {
             return
                 Directory
-                    .EnumerateFiles(Path.Combine(hostingEnvironment.WebRootPath, "Data"))
+                    .EnumerateFiles(Path.Combine(hostingEnvironment.WebRootPath, "Data/Vision"))
                     .Select(filename => Path.GetFileName(filename))
                     .OrderByDescending(filename => filename)
                     .Take(100);

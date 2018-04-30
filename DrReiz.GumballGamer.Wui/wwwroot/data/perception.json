@@ -1,0 +1,542 @@
+{
+  "frame": {
+    "x": 0,
+    "y": 0,
+    "width": 900,
+    "height": 1600
+  },
+  "perceptionShots": [
+    {
+      "shotName": "171213.233408",
+      "areas": [
+        {
+          "x": 30,
+          "y": 300,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-0",
+          "value": "pit"
+        },
+        {
+          "x": 200,
+          "y": 300,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-0",
+          "value": "den"
+        },
+        {
+          "x": 370,
+          "y": 300,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-0",
+          "value": "den"
+        },
+        {
+          "x": 540,
+          "y": 250,
+          "width": 170,
+          "height": 156,
+          "name": "float-3-0",
+          "value": "enemy"
+        },
+        {
+          "x": 710,
+          "y": 280,
+          "width": 170,
+          "height": 156,
+          "name": "cell-4-0",
+          "value": "block"
+        },
+        {
+          "x": 30,
+          "y": 456,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-1",
+          "value": "empty"
+        },
+        {
+          "x": 200,
+          "y": 456,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-1",
+          "value": "empty"
+        },
+        {
+          "x": 370,
+          "y": 456,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-1",
+          "value": "empty"
+        },
+        {
+          "x": 540,
+          "y": 456,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-1",
+          "value": "bee-tree"
+        },
+        {
+          "x": 710,
+          "y": 436,
+          "width": 170,
+          "height": 156,
+          "name": "cell-4-1",
+          "value": "block"
+        },
+        {
+          "x": 30,
+          "y": 612,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-2",
+          "value": "tree"
+        },
+        {
+          "x": 200,
+          "y": 612,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-2",
+          "value": "empty"
+        },
+        {
+          "x": 370,
+          "y": 612,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-2",
+          "value": "empty"
+        },
+        {
+          "x": 540,
+          "y": 562,
+          "width": 170,
+          "height": 156,
+          "name": "float-3-2",
+          "value": "key"
+        },
+        {
+          "x": 710,
+          "y": 562,
+          "width": 170,
+          "height": 156,
+          "name": "float-4-2",
+          "value": "enemy"
+        },
+        {
+          "x": 30,
+          "y": 768,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-3",
+          "value": "door"
+        },
+        {
+          "x": 200,
+          "y": 768,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-3",
+          "value": "pit"
+        },
+        {
+          "x": 370,
+          "y": 768,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-3",
+          "value": "empty"
+        },
+        {
+          "x": 540,
+          "y": 768,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-3",
+          "value": "empty"
+        },
+        {
+          "x": 710,
+          "y": 748,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-3",
+          "value": "block"
+        },
+        {
+          "x": 30,
+          "y": 924,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-4",
+          "value": "empty"
+        },
+        {
+          "x": 200,
+          "y": 924,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-4",
+          "value": "empty"
+        },
+        {
+          "x": 370,
+          "y": 924,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-4",
+          "value": "empty"
+        },
+        {
+          "x": 540,
+          "y": 874,
+          "width": 170,
+          "height": 156,
+          "name": "float-3-4",
+          "value": "EP"
+        },
+        {
+          "x": 710,
+          "y": 904,
+          "width": 170,
+          "height": 156,
+          "name": "cell-4-4",
+          "value": "slab"
+        },
+        {
+          "x": 30,
+          "y": 1080,
+          "width": 170,
+          "height": 136,
+          "name": "cell-0-4",
+          "value": "empty"
+        },
+        {
+          "x": 200,
+          "y": 1030,
+          "width": 170,
+          "height": 156,
+          "name": "float-1-5",
+          "value": "arrow"
+        },
+        {
+          "x": 370,
+          "y": 1030,
+          "width": 170,
+          "height": 156,
+          "name": "float-2-5",
+          "value": "mana"
+        },
+        {
+          "x": 540,
+          "y": 1080,
+          "width": 170,
+          "height": 136,
+          "name": "cell-3-5",
+          "value": "empty"
+        },
+        {
+          "x": 710,
+          "y": 1060,
+          "width": 170,
+          "height": 156,
+          "name": "cell-4-5",
+          "value": "slab"
+        }
+      ]
+    },
+    {
+      "shotName": "171213.233335",
+      "areas": [
+        {
+          "x": 30,
+          "y": 280,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-0",
+          "value": "dark-slab"
+        },
+        {
+          "x": 200,
+          "y": 280,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-0",
+          "value": "dark-slab"
+        },
+        {
+          "x": 370,
+          "y": 280,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-0",
+          "value": "dark-slab"
+        },
+        {
+          "x": 540,
+          "y": 280,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-0",
+          "value": "dark-slab"
+        },
+        {
+          "x": 710,
+          "y": 280,
+          "width": 170,
+          "height": 156,
+          "name": "cell-4-0",
+          "value": "dark-slab"
+        },
+        {
+          "x": 30,
+          "y": 436,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-1",
+          "value": "light-slab"
+        },
+        {
+          "x": 200,
+          "y": 436,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-1",
+          "value": "dark-slab"
+        },
+        {
+          "x": 370,
+          "y": 436,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-1",
+          "value": "dark-slab"
+        },
+        {
+          "x": 540,
+          "y": 436,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-1",
+          "value": "dark-slab"
+        },
+        {
+          "x": 710,
+          "y": 436,
+          "width": 170,
+          "height": 156,
+          "name": "cell-4-1",
+          "value": "dark-slab"
+        },
+        {
+          "x": 30,
+          "y": 612,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-2",
+          "value": "tree"
+        },
+        {
+          "x": 200,
+          "y": 592,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-2",
+          "value": "light-slab"
+        },
+        {
+          "x": 370,
+          "y": 592,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-2",
+          "value": "dark-slab"
+        },
+        {
+          "x": 540,
+          "y": 592,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-2",
+          "value": "dark-slab"
+        },
+        {
+          "x": 710,
+          "y": 592,
+          "width": 170,
+          "height": 156,
+          "name": "cell-4-2",
+          "value": "dark-slab"
+        },
+        {
+          "x": 30,
+          "y": 768,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-3",
+          "value": "door"
+        },
+        {
+          "x": 200,
+          "y": 748,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-3",
+          "value": "light-slab"
+        },
+        {
+          "x": 370,
+          "y": 748,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-3",
+          "value": "dark-slab"
+        },
+        {
+          "x": 540,
+          "y": 748,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-3",
+          "value": "dark-slab"
+        },
+        {
+          "x": 710,
+          "y": 748,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-3",
+          "value": "dark-slab"
+        },
+        {
+          "x": 30,
+          "y": 904,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-4",
+          "value": "light-slab"
+        },
+        {
+          "x": 200,
+          "y": 904,
+          "width": 170,
+          "height": 156,
+          "name": "cell-1-4",
+          "value": "dark-slab"
+        },
+        {
+          "x": 370,
+          "y": 904,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-4",
+          "value": "dark-slab"
+        },
+        {
+          "x": 540,
+          "y": 904,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-4",
+          "value": "dark-slab"
+        },
+        {
+          "x": 710,
+          "y": 904,
+          "width": 170,
+          "height": 156,
+          "name": "cell-4-4",
+          "value": "dark-slab"
+        },
+        {
+          "x": 30,
+          "y": 1060,
+          "width": 170,
+          "height": 156,
+          "name": "cell-0-4",
+          "value": "dark-slab"
+        },
+        {
+          "x": 200,
+          "y": 1080,
+          "width": 170,
+          "height": 136,
+          "name": "cell-1-5",
+          "value": "arrow"
+        },
+        {
+          "x": 370,
+          "y": 1060,
+          "width": 170,
+          "height": 156,
+          "name": "cell-2-5",
+          "value": "dark-slab"
+        },
+        {
+          "x": 540,
+          "y": 1060,
+          "width": 170,
+          "height": 156,
+          "name": "cell-3-5",
+          "value": "dark-slab"
+        },
+        {
+          "x": 710,
+          "y": 1060,
+          "width": 170,
+          "height": 156,
+          "name": "cell-4-5",
+          "value": "dark-slab"
+        }
+      ]
+    },
+    {
+      "shotName": "171213.233229",
+      "areas": [
+        {
+          "x": 30,
+          "y": 540,
+          "width": 840,
+          "height": 500,
+          "name": "popup",
+          "value": "disconnect"
+        }
+      ]
+    },
+    {
+      "shotName": "171213.233315",
+      "areas": [
+        {
+          "x": 210,
+          "y": 1480,
+          "width": 140,
+          "height": 100,
+          "name": "left-button",
+          "value": "alchemy"
+        },
+        {
+          "x": 385,
+          "y": 1480,
+          "width": 140,
+          "height": 100,
+          "name": "center-button",
+          "value": "gumbals"
+        },
+        {
+          "x": 560,
+          "y": 1480,
+          "width": 140,
+          "height": 100,
+          "name": "right-button",
+          "value": "shop"
+        }
+      ]
+    }
+  ]
+}
