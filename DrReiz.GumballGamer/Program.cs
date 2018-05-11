@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Shipwreck.Phash;
 using NitroBolt.Functional;
+using Newtonsoft.Json.Linq;
 
 namespace DrReiz.GumballGamer
 {
@@ -128,23 +129,91 @@ namespace DrReiz.GumballGamer
 
         static void Perception()
         {
-            var area = new { x = 200 + 10, y = 1600 - 120, width = 160 - 20, height = 100 };
-            var rect = new Rectangle(area.x, area.y, area.width, area.height);
+            var perceptionJson = JObject.Parse(System.IO.File.ReadAllText(@"p:\Projects\DrReiz.Robo-Gamer\DrReiz.GumballGamer.Wui\wwwroot\data\perception.json"));
+            var shots = perceptionJson["perceptionShots"] as JArray;
+
+            //foreach (JObject shot in shots)
+            //{
+            //    var shotName = shot.Value<string>("shotName");
+            //    foreach (JObject jarea in shot.Value<JArray>("areas"))
+            //    {
+            //        Console.WriteLine($"{jarea.Value<string>("name")}: {jarea.Value<string>("value")}");
+            //    }
+            //}
+            var areas = shots.SelectMany(shot =>
+            {
+                var shotName = shot.Value<string>("shotName");
+                return shot.Value<JArray>("areas").OfType<JObject>()
+                  .Select(jarea => new { name = jarea.Value<string>("name"), value = jarea.Value<string>("value"), shot = shotName });
+            })
+            .GroupBy(pair => new { pair.name, pair.value })
+            .ToDictionary(group => group.Key, group => group.Select(pair => pair.shot).Distinct().ToArray());
+
+            foreach (var area in areas)
+                Console.WriteLine($"{area.Key.name}--{area.Key.value}: {area.Value.JoinToString(", ")}");
+
+            var areaShotNames = shots.Select(shot => shot.Value<string>("shotName"))
+                .ToDictionary(name => name, name => name);
 
 
-            //var areaBitmap = bitmap.Clone(rect, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
-            //areaBitmap.Save("area.png");
+            var screenshots = System.IO.Directory.GetFiles(@"t:\Data\Gumball\Screenshots")
+            .Select(screenshot => new { filename = screenshot, name = System.IO.Path.GetFileNameWithoutExtension(screenshot) })
+            .ToArray();
+
+            var moderateScreenshots = screenshots.Where(shot => areaShotNames.ContainsKey(shot.name)).ToArray();
+
 
             var rnd = new Random();
 
-            var rs = Enumerable.Range(0, 10).Select(i => rnd.Next(rect.Width * rect.Height * 3)).ToArray();
+            string toFullname(string shotName) => @"p:\Projects\DrReiz.Robo-Gamer\DrReiz.GumballGamer.Wui\wwwroot\data\vision\" + shotName + ".png";
 
-            var etalon = Pick(@"p:\Projects\DrReiz.Robo-Gamer\DrReiz.GumballGamer.Wui\wwwroot\data\171213.233315.png", rect, rs);
-            foreach (var imageFilename in System.IO.Directory.GetFiles(@"t:\Data\Gumball\Screenshots"))
+            foreach (JObject shot in shots)
             {
-                var pick = Pick(imageFilename, rect, rs);
-                var difs = etalon.Zip(pick, (e, p) => Math.Abs(e - p));
-                Console.WriteLine(difs.Select(d => d.ToString()).JoinToString(" "));
+                var shotName = shot.Value<string>("shotName");
+                foreach (JObject jarea in shot.Value<JArray>("areas"))
+                {
+                    var area = new
+                    {
+                        name = jarea.Value<string>("name"),
+                        value = jarea.Value<string>("value"),
+                        x = jarea.Value<int>("x"), y = jarea.Value<int>("y"), width = jarea.Value<int>("width"), height = jarea.Value<int>("height")
+                    };
+                    Console.WriteLine($"{area.name}: {area.value}");
+
+                    var rect = new Rectangle(area.x, area.y, area.width, area.height);
+
+                    //var Screenshots = screenshots.Where(screenshot)
+
+
+                    //var areaBitmap = bitmap.Clone(rect, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+                    //areaBitmap.Save("area.png");
+
+
+                    var rs = Enumerable.Range(0, 10).Select(i => rnd.Next(rect.Width * rect.Height * 3)).ToArray();
+
+                    var groups = moderateScreenshots.Select(screenshot => new { screenshot, stamp = Pick(screenshot.filename, rect, rs) })
+                        .GroupBy(pair => areas.Find(new { name = area.name, value = area.value }).OrEmpty().Contains(pair.screenshot.name));
+
+                    var etalons = groups.FirstOrDefault(group => group.Key == true).OrEmpty();
+                    var etalon = etalons.FirstOrDefault();
+
+                    var others = groups.FirstOrDefault(group => group.Key == false).OrEmpty();
+
+                    var etalonRate = etalons.Select(pair => pair.stamp.Zip(etalon.stamp, (e, p) => Math.Abs(e - p)).Max()).Max();
+                    var otherRates = others.Select(pair => pair.stamp.Zip(etalon.stamp, (e, p) => Math.Abs(e - p)).Max()).ToArray();
+                    var otherRate = otherRates.Any() ? otherRates.Min() : -1;
+
+                    Console.WriteLine($"{etalonRate} {otherRate}");
+
+                    //var etalon = Pick(@"p:\Projects\DrReiz.Robo-Gamer\DrReiz.GumballGamer.Wui\wwwroot\data\vision\" + shotName + ".png", rect, rs);
+                    //foreach (var imageFilename in System.IO.Directory.GetFiles(@"t:\Data\Gumball\Screenshots"))
+                    //{
+                    //    var pick = Pick(imageFilename, rect, rs);
+                    //    var difs = etalon.Zip(pick, (e, p) => Math.Abs(e - p));
+                    //    var max = difs.Max();
+                    //    Console.WriteLine($"{max,3}: {difs.Select(d => d.ToString()).JoinToString(" ")}");
+                    //}
+                }
             }
 
         }
