@@ -264,6 +264,12 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DrReiz.GumballGamer.Messages\DrReiz.GumballGamer.Messages.csproj">
+      <Project>{eb468f61-bbaf-4561-acdf-18f8bb4194a1}</Project>
+      <Name>DrReiz.GumballGamer.Messages</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

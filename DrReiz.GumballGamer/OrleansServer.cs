@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using DrReiz.GumballGamer.Messages;
 using Orleans.Configuration;
 using Orleans.Hosting;
 
@@ -31,13 +32,13 @@ namespace DrReiz.GumballGamer
                   .Configure<ClusterOptions>(options =>
                   {
                       options.ClusterId = "dev";
-                      options.ServiceId = "MyAwesomeService";
+                      options.ServiceId = "GumballService";
                   })
               // Configure connectivity
               .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback);
                   // Configure logging with any logging framework that supports Microsoft.Extensions.Logging.
                   // In this particular case it logs using the Microsoft.Extensions.Logging.Console package.
-                  //.ConfigureLogging(logging => logging.AddConsole());
+               //.ConfigureLogging(logging => logging.AddConsole());
 
             var host = builder.Build();
             await host.StartAsync();
@@ -45,16 +46,6 @@ namespace DrReiz.GumballGamer
         }
     }
 
-    class OrleansGrain: Orleans.Grain, IGumballPing
-    {
-        public Task<string> SayPing(string msg)
-        {
-            return Task.FromResult($"Gumball ping response: {DateTime.UtcNow.Ticks}");
-        }
-    }
+ 
 
-    public interface IGumballPing : Orleans.IGrainWithIntegerKey
-    {
-        Task<string> SayPing(string msg);
-    }
 }
