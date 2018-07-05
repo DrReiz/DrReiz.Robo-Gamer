@@ -5,8 +5,10 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using DrReiz.GumballGamer.Messages;
+using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
+using Microsoft.Extensions.Logging;
 
 
 namespace DrReiz.GumballGamer
@@ -15,37 +17,33 @@ namespace DrReiz.GumballGamer
     {
         public static async Task Execute()
         {
-            var host = await StartSilo();
-            Console.WriteLine("Press any key to terminate...");
-            Console.ReadKey();
-
-            await host.StopAsync();
+            await StartSilo();
 
 
         }
-        public static async Task<ISiloHost> StartSilo()
+        public static async Task StartSilo()
         {
-            var builder = new SiloHostBuilder()
-                  // Use localhost clustering for a single local silo
-                  .UseLocalhostClustering()
-                  // Configure ClusterId and ServiceId
-                  .Configure<ClusterOptions>(options =>
-                  {
-                      options.ClusterId = "dev";
-                      options.ServiceId = "GumballService";
-                  })
-              // Configure connectivity
-              .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback);
-                  // Configure logging with any logging framework that supports Microsoft.Extensions.Logging.
-                  // In this particular case it logs using the Microsoft.Extensions.Logging.Console package.
-               //.ConfigureLogging(logging => logging.AddConsole());
+            using (var host = new SiloHostBuilder()
+                 .UseLocalhostClustering()
+                 //.ConfigureLogging(logging => logging.AddConsole())
+                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(PingGrain).Assembly).WithReferences())
+                 .Build())
+            {
+                await host.StartAsync();
 
-            var host = builder.Build();
-            await host.StartAsync();
-            return host;
+                Console.WriteLine("Silo started. Press any key to terminate...");
+                Console.ReadKey();
+            }
         }
     }
 
- 
+    public class PingGrain : Orleans.Grain, IGumballPing
+    {
+        public Task<string> Ping(string msg)
+        {
+            Console.WriteLine("Gumball pinged");
+            return Task.FromResult($"Gumball ping response: {DateTime.UtcNow.Ticks}");
+        }
+    }
 
 }

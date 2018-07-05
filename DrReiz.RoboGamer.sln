@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrReiz.GumballGamer", "DrRe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrReiz.GumballGamer.Wui", "DrReiz.GumballGamer.Wui\DrReiz.GumballGamer.Wui.csproj", "{F79B72EE-A881-4A5B-BAC9-C9451E95F2B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrReiz.GumballGamer.Messages", "DrReiz.GumballGamer.Messages\DrReiz.GumballGamer.Messages.csproj", "{EB468F61-BBAF-4561-ACDF-18F8BB4194A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrReiz.GumballGamer.Messages", "DrReiz.GumballGamer.Messages\DrReiz.GumballGamer.Messages.csproj", "{EB468F61-BBAF-4561-ACDF-18F8BB4194A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

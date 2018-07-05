@@ -9,11 +9,11 @@ namespace DrReiz.GumballGamer.Messages
         Task<string> Ping(string msg);
     }
 
-    public class OrleansGrain : Orleans.Grain, IGumballPing
-    {
-        public Task<string> Ping(string msg)
-        {
-            return Task.FromResult($"Gumball ping response: {DateTime.UtcNow.Ticks}");
-        }
-    }
+    //public class OrleansGrain : Orleans.Grain, IGumballPing
+    //{
+    //    public Task<string> Ping(string msg)
+    //    {
+    //        return Task.FromResult($"Gumball ping response: {DateTime.UtcNow.Ticks}");
+    //    }
+    //}
 }

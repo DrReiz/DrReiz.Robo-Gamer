@@ -34,23 +34,18 @@ namespace DrReiz.GumballGamer.Wui.Controllers
         [HttpGet("/ping")]
         public async Task<string> Ping()
         {
-            var client = new ClientBuilder()
-                .UseLocalhostClustering()
-                // Clustering information
-                .Configure<ClusterOptions>(options =>
-                {
-                    options.ClusterId = "dev";
-                    options.ServiceId = "GumballService";
-                })
-                // Clustering provider
-                // Application parts: just reference one of the grain interfaces that we use
-                .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGumballPing).Assembly))
-                .Build();
-            await client.Connect();
+            using (var client = new ClientBuilder()
+                 .UseLocalhostClustering()
+                 //.ConfigureLogging(logging => logging.AddConsole())
+                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGumballPing).Assembly).WithReferences())
+                 .Build())
+            {
+                await client.Connect();
 
-            var pingerId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
-            var pinger = client.GetGrain<IGumballPing>(pingerId);
-            return await pinger.Ping(DateTime.UtcNow.Ticks.ToString());
+                var pingerId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
+                var pinger = client.GetGrain<IGumballPing>(pingerId);
+                return await pinger.Ping(DateTime.UtcNow.Ticks.ToString());
+            }
 
         }
     }
