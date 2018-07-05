@@ -7,6 +7,7 @@ namespace DrReiz.GumballGamer.Messages
     public interface IGumballPing : Orleans.IGrainWithStringKey
     {
         Task<string> Ping(string msg);
+        Task<byte[]> CaptureScreenshot();
     }
 
     //public class OrleansGrain : Orleans.Grain, IGumballPing

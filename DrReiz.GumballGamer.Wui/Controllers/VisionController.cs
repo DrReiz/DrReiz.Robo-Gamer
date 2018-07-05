@@ -48,5 +48,23 @@ namespace DrReiz.GumballGamer.Wui.Controllers
             }
 
         }
+        [HttpGet("/screenshot")]
+        public async Task<IActionResult> Screenshot()
+        {
+            using (var client = new ClientBuilder()
+                 .UseLocalhostClustering()
+                 //.ConfigureLogging(logging => logging.AddConsole())
+                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGumballPing).Assembly).WithReferences())
+                 .Build())
+            {
+                await client.Connect();
+
+                var pingerId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
+                var pinger = client.GetGrain<IGumballPing>(pingerId);
+                var bytes = await pinger.CaptureScreenshot();
+                return File(bytes, "image/png");
+            }
+
+        }
     }
 }

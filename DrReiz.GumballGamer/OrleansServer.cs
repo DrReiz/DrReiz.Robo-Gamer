@@ -39,6 +39,19 @@ namespace DrReiz.GumballGamer
 
     public class PingGrain : Orleans.Grain, IGumballPing
     {
+        public async Task<byte[]> CaptureScreenshot()
+        {
+            using (var client = new AdbClient("emulator-5554"))
+            {
+                var bitmap = client.CaptureScreenshot();
+                using (var stream = new System.IO.MemoryStream())
+                {
+                    bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    return stream.ToArray();
+                }
+            }
+        }
+
         public Task<string> Ping(string msg)
         {
             Console.WriteLine("Gumball pinged");
