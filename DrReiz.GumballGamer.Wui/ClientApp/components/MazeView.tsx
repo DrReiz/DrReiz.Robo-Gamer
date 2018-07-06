@@ -22,8 +22,8 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                 //img_name: "171213.233335.png",
                 //img_name: "171213.233408.png",
                 selectedVisionShot: {
-                    name: "171213.233315",
-                    filename: "171213.233315.png",
+                    name: "171213.233408",
+                    filename: "171213.233408.png",
                 },
                 visionShots: [],
                 perception: {
@@ -34,11 +34,18 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                 }
             };
 
+        this.loadSetting();
         this.load();
         this.loadPerception();
 
     }
 
+    async loadSetting() {
+        let response = await fetch('data/setting.json');
+        let setting = (await response.json());
+
+        this.setState({ selectedVisionShot: { name: setting.selectedVisionShot, filename: setting.selectedVisionShot + ".png"} });
+    }
     async load() {
         let response = await fetch('visionShots');
         let visionShotFilenames = (await response.json()) as string[];
