@@ -21,7 +21,7 @@ namespace DrReiz.GumballGamer.Wui.Controllers
         IHostingEnvironment hostingEnvironment;
 
         [HttpGet("/visionShots/")]
-        public object Index()
+        public object Shots()
         {
             return
                 Directory
@@ -30,6 +30,14 @@ namespace DrReiz.GumballGamer.Wui.Controllers
                     .OrderByDescending(filename => filename)
                     .Take(100);
         }
+
+        [HttpGet("/screenshot/{name}")]
+        public IActionResult Screenshot(string name)
+        {
+            var dir = @"t:\Data\Gumball\Screenshots";
+            return File(System.IO.File.ReadAllBytes(Path.Combine(dir, name + ".png")), "image/png");
+        }
+
 
         [HttpGet("/ping")]
         public async Task<string> Ping()
@@ -48,8 +56,8 @@ namespace DrReiz.GumballGamer.Wui.Controllers
             }
 
         }
-        [HttpGet("/screenshot")]
-        public async Task<IActionResult> Screenshot()
+        [HttpPost("/screenshot/capture")]
+        public async Task<IActionResult> CaptureScreenshot()
         {
             using (var client = new ClientBuilder()
                  .UseLocalhostClustering()

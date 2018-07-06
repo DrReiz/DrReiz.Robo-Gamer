@@ -98,7 +98,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                     </div>
                     <div style={{ display: 'table-row' }}>
                         <div style={{ width: frame.width, height: frame.height, border: '0px solid black', display: 'table-cell', position: 'relative', color: 'lightblue' }}>
-                            <img style={{ width: frame.width, height: frame.height, position: 'absolute' }} src={'data/vision/' + this.state.selectedVisionShot.filename} />
+                            <img style={{ width: frame.width, height: frame.height, position: 'absolute' }} src={'screenshot/' + this.state.selectedVisionShot.name} />
                             {
                               this.state.is_grid_display ? 
                               grid.map((area,k) =>
