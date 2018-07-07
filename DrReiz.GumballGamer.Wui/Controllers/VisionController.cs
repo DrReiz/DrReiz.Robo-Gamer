@@ -50,13 +50,13 @@ namespace DrReiz.GumballGamer.Wui.Controllers
             using (var client = new ClientBuilder()
                  .UseLocalhostClustering()
                  //.ConfigureLogging(logging => logging.AddConsole())
-                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGumballPing).Assembly).WithReferences())
+                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(ISample).Assembly).WithReferences())
                  .Build())
             {
                 await client.Connect();
 
                 var pingerId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
-                var pinger = client.GetGrain<IGumballPing>(pingerId);
+                var pinger = client.GetGrain<ISample>(pingerId);
                 return await pinger.Ping(DateTime.UtcNow.Ticks.ToString());
             }
 
@@ -67,15 +67,15 @@ namespace DrReiz.GumballGamer.Wui.Controllers
             using (var client = new ClientBuilder()
                  .UseLocalhostClustering()
                  //.ConfigureLogging(logging => logging.AddConsole())
-                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGumballPing).Assembly).WithReferences())
+                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGumball).Assembly).WithReferences())
                  .Build())
             {
                 await client.Connect();
 
-                var pingerId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
-                var pinger = client.GetGrain<IGumballPing>(pingerId);
-                var bytes = await pinger.CaptureScreenshot();
-                return File(bytes, "image/png");
+                var gumballId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
+                var gumball = client.GetGrain<IGumball>(gumballId);
+                var name = await gumball.CaptureScreenshot();
+                return Json(new { visionShot= name });
             }
 
         }

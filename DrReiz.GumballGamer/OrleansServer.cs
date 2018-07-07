@@ -37,7 +37,16 @@ namespace DrReiz.GumballGamer
         }
     }
 
-    public class PingGrain : Orleans.Grain, IGumballPing
+    public class PingGrain : Orleans.Grain, ISample
+    {
+
+        public Task<string> Ping(string msg)
+        {
+            Console.WriteLine("Gumball pinged");
+            return Task.FromResult($"Gumball ping response: {DateTime.UtcNow.Ticks}");
+        }
+    }
+    public class AndroidGrain : Orleans.Grain, IAndroid
     {
         public async Task<byte[]> CaptureScreenshot()
         {
@@ -52,11 +61,31 @@ namespace DrReiz.GumballGamer
             }
         }
 
-        public Task<string> Ping(string msg)
+    }
+
+    public class GumballGrain : Orleans.Grain, IGumball
+    {
+        public async Task<string> CaptureScreenshot()
         {
-            Console.WriteLine("Gumball pinged");
-            return Task.FromResult($"Gumball ping response: {DateTime.UtcNow.Ticks}");
+            var outDir = @"t:\Data\Gumball\Screenshots";
+
+            using (var client = new AdbClient("emulator-5554"))
+            {
+                var bitmap = client.CaptureScreenshot();
+                using (var stream = new System.IO.MemoryStream())
+                {
+                    bitmap.Save(stream, System.Drawing.Imaging.ImageFormat.Png);
+                    var bytes = stream.ToArray();
+
+                    var name = $"{DateTime.UtcNow:yyMMdd.HHmmss}";
+
+                    System.IO.File.WriteAllBytes(System.IO.Path.Combine(outDir, $"{name}.png"), bytes);
+
+                    return name;
+                }
+            }
         }
+
     }
 
 }

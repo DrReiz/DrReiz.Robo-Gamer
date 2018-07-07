@@ -56,6 +56,15 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
         let perception = (await response.json()) as Perception;
         this.setState({ perception:perception });
     }
+    async captureScreenshot() {
+        let response = await this.post('screenshot/capture', {});
+        let answer = (await response.json());
+        this.setState({ selectedVisionShot: { name: answer.visionShot } });
+        await this.load();
+    }
+    async post(url:string, data:any) {
+        return await fetch(url, { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' } });
+    }
 
     public render() {
         //let visionShotFilenames = ["171213.233408.png", "171213.233335.png", "171213.233229.png"];
@@ -85,7 +94,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                     }
                 </div>
                 <div className="col-sm-10">
-                    <div onClick={() => { this.toggleGridDisplay() }}>grid</div>
+                    <button onClick={() => { this.toggleGridDisplay() }}>grid</button><button onClick={() => { this.captureScreenshot() }}>capture</button>
                     <div style={{ display: 'table-row' }}>
                         <div style={{ width: frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%' }}>AI-Gamer Vision
                         </div>

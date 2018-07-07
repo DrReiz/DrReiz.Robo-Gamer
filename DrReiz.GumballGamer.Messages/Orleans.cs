@@ -4,10 +4,18 @@ using System.Threading.Tasks;
 namespace DrReiz.GumballGamer.Messages
 {
 
-    public interface IGumballPing : Orleans.IGrainWithStringKey
+    public interface IGumball : Orleans.IGrainWithStringKey
+    {
+        Task<string> CaptureScreenshot();
+    }
+    public interface IAndroid : Orleans.IGrainWithStringKey
+    {
+        Task<byte[]> CaptureScreenshot();
+    }
+
+    public interface ISample: Orleans.IGrainWithStringKey
     {
         Task<string> Ping(string msg);
-        Task<byte[]> CaptureScreenshot();
     }
 
     //public class OrleansGrain : Orleans.Grain, IGumballPing
