@@ -75,7 +75,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
         return <div>
             <h1>Maze</h1>
             <div className="row">
-                <div className="col-sm-2">
+                <div className="col-sm-2" style={{ height: "900px", overflowY: "scroll" }}>
                     {
                         visionShots.map((shot, k) =>
                             <div key={k} style={{ color: shot.name == this.state.selectedVisionShot.name ? "blue" : "inherit", cursor: "pointer" }} onClick={() => {this.selectVisionShot(shot)}}>

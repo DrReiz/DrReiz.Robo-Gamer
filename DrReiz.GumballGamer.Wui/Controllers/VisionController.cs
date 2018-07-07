@@ -20,22 +20,27 @@ namespace DrReiz.GumballGamer.Wui.Controllers
 
         IHostingEnvironment hostingEnvironment;
 
+        static string storageDir = @"t:\Data\Gumball\Screenshots";
+
         [HttpGet("/visionShots/")]
         public object Shots()
         {
+            var dirs = new[] { Path.Combine(hostingEnvironment.WebRootPath, "Data/Vision"), storageDir };
+
             return
-                Directory
-                    .EnumerateFiles(Path.Combine(hostingEnvironment.WebRootPath, "Data/Vision"))
+                dirs.SelectMany(dir => 
+                    Directory
+                    .EnumerateFiles(dir)
                     .Select(filename => Path.GetFileName(filename))
-                    .OrderByDescending(filename => filename)
-                    .Take(100);
+                    .OrderByDescending(name => name)
+                    .Take(100))
+                    .OrderByDescending(name => name);
         }
 
         [HttpGet("/screenshot/{name}")]
         public IActionResult Screenshot(string name)
         {
-            var dir = @"t:\Data\Gumball\Screenshots";
-            return File(System.IO.File.ReadAllBytes(Path.Combine(dir, name + ".png")), "image/png");
+            return File(System.IO.File.ReadAllBytes(Path.Combine(storageDir, name + ".png")), "image/png");
         }
 
 
