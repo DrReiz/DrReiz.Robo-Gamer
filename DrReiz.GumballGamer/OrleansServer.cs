@@ -63,11 +63,12 @@ namespace DrReiz.GumballGamer
 
     }
 
-    public class GumballGrain : Orleans.Grain, IGumball
+    public class GumballGrain : Orleans.Grain, IGamer
     {
-        public async Task<string> CaptureScreenshot()
+        public async Task<string> CaptureScreenshot(string game)
         {
-            var outDir = @"t:\Data\Gumball\Screenshots";
+            //var outDir = @"t:\Data\Gumball\Screenshots";
+            var context = GameContext.Get(game);
 
             using (var client = new AdbClient("emulator-5554"))
             {
@@ -79,7 +80,7 @@ namespace DrReiz.GumballGamer
 
                     var name = $"{DateTime.UtcNow:yyMMdd.HHmmss}";
 
-                    System.IO.File.WriteAllBytes(System.IO.Path.Combine(outDir, $"{name}.png"), bytes);
+                    System.IO.File.WriteAllBytes(System.IO.Path.Combine(context.StorageDir, $"{name}.png"), bytes);
 
                     return name;
                 }

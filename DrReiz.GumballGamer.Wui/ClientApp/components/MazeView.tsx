@@ -2,6 +2,7 @@ import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
 interface MazeState {
+    game: string;
     is_grid_display: boolean;
     selectedVisionShot: VisionShot;
     visionShots: VisionShot[];
@@ -17,6 +18,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
         super();
         this.state =
             {
+                game: "gumball",
                 is_grid_display: false,
                 //img_name: "171213.233335.png",
                 //img_name: "171213.233408.png",
@@ -32,20 +34,22 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                 }
             };
 
-        this.loadSetting();
-        this.load();
-        this.loadPerception();
+        this.loadAll();
 
+    }
+    async loadAll() {
+        await this.loadSetting();
+        await Promise.all([this.load(), this.loadPerception()]);
     }
 
     async loadSetting() {
         let response = await fetch('data/setting.json');
         let setting = (await response.json());
 
-        this.setState({ selectedVisionShot: { name: setting.selectedVisionShot} });
+        this.setState({ selectedVisionShot: { name: setting.selectedVisionShot}, game: setting.game });
     }
     async load() {
-        let response = await fetch('visionShots');
+        let response = await fetch(this.state.game + '/visionShots');
         let visionShotFilenames = (await response.json()) as string[];
         let visionShots = visionShotFilenames.map(filename => ({ name: filename.replace(".png", ""), filename: filename }));
 
@@ -57,7 +61,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
         this.setState({ perception:perception });
     }
     async captureScreenshot() {
-        let response = await this.post('screenshot/capture', {});
+        let response = await this.post(this.state.game + '/screenshot/capture', {});
         let answer = (await response.json());
         this.setState({ selectedVisionShot: { name: answer.visionShot } });
         await this.load();
@@ -82,7 +86,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
         //console.log(maze);
 
         return <div>
-            <h1>Maze</h1>
+            <h1>{this.state.game}</h1>
             <div className="row">
                 <div className="col-sm-2" style={{ height: "900px", overflowY: "scroll" }}>
                     {
@@ -105,7 +109,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                     </div>
                     <div style={{ display: 'table-row' }}>
                         <div style={{ width: frame.width, height: frame.height, border: '0px solid black', display: 'table-cell', position: 'relative', color: 'lightblue' }}>
-                            <img style={{ width: frame.width, height: frame.height, position: 'absolute' }} src={'screenshot/' + this.state.selectedVisionShot.name} />
+                            <img style={{ width: frame.width, height: frame.height, position: 'absolute' }} src={this.state.game + '/screenshot/' + this.state.selectedVisionShot.name} />
                             {
                               this.state.is_grid_display ? 
                               grid.map((area,k) =>

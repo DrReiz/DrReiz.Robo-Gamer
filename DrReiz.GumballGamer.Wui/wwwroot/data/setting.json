@@ -1,3 +1,6 @@
 {
-  "selectedVisionShot":"171213.233315"
+  "game": "jewel",
+  "selectedVisionShot": "171213.233315",
+
+  "games":  ["gumball", "jewel"]
 }

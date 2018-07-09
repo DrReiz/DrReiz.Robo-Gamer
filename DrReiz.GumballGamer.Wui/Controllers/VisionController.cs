@@ -20,12 +20,12 @@ namespace DrReiz.GumballGamer.Wui.Controllers
 
         IHostingEnvironment hostingEnvironment;
 
-        static string storageDir = @"t:\Data\Gumball\Screenshots";
-
-        [HttpGet("/visionShots/")]
-        public object Shots()
+        [HttpGet("/{game}/visionShots/")]
+        public object Shots(string game)
         {
-            var dirs = new[] { Path.Combine(hostingEnvironment.WebRootPath, "Data/Vision"), storageDir };
+            var context = GameContext.Get(game);
+
+            var dirs = new[] { Path.Combine(hostingEnvironment.WebRootPath, "Data/Vision"), context.StorageDir };
 
             return
                 dirs.SelectMany(dir => 
@@ -37,10 +37,11 @@ namespace DrReiz.GumballGamer.Wui.Controllers
                     .OrderByDescending(name => name);
         }
 
-        [HttpGet("/screenshot/{name}")]
-        public IActionResult Screenshot(string name)
+        [HttpGet("/{game}/screenshot/{name}")]
+        public IActionResult Screenshot(string game, string name)
         {
-            return File(System.IO.File.ReadAllBytes(Path.Combine(storageDir, name + ".png")), "image/png");
+            var context = GameContext.Get(game);
+            return File(System.IO.File.ReadAllBytes(Path.Combine(context.StorageDir, name + ".png")), "image/png");
         }
 
 
@@ -61,20 +62,20 @@ namespace DrReiz.GumballGamer.Wui.Controllers
             }
 
         }
-        [HttpPost("/screenshot/capture")]
-        public async Task<IActionResult> CaptureScreenshot()
+        [HttpPost("/{game}/screenshot/capture")]
+        public async Task<IActionResult> CaptureScreenshot(string game)
         {
             using (var client = new ClientBuilder()
                  .UseLocalhostClustering()
                  //.ConfigureLogging(logging => logging.AddConsole())
-                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGumball).Assembly).WithReferences())
+                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGamer).Assembly).WithReferences())
                  .Build())
             {
                 await client.Connect();
 
-                var gumballId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
-                var gumball = client.GetGrain<IGumball>(gumballId);
-                var name = await gumball.CaptureScreenshot();
+                var gameId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
+                var gamer = client.GetGrain<IGamer>(gameId);
+                var name = await gamer.CaptureScreenshot(game);
                 return Json(new { visionShot= name });
             }
 
