@@ -56,7 +56,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
         this.setState({ visionShots: visionShots });
     }
     async loadPerception() {
-        let response = await fetch('data/perception.json');
+        let response = await fetch('data/' + this.state.game + '/perception.json');
         let perception = (await response.json()) as Perception;
         this.setState({ perception:perception });
     }
