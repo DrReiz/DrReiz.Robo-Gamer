@@ -113,6 +113,9 @@
     <Reference Include="OrleansProviders, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Orleans.OrleansProviders.2.0.0\lib\netstandard2.0\OrleansProviders.dll</HintPath>
     </Reference>
+    <Reference Include="ShaniSoft.Drawing.Pnm, Version=1.0.6765.33205, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ShaniSoft.Drawing.Pnm.1.0.2\lib\net20\ShaniSoft.Drawing.Pnm.dll</HintPath>
+    </Reference>
     <Reference Include="Shipwreck.Phash, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Shipwreck.Phash.0.0.2\lib\net452\Shipwreck.Phash.dll</HintPath>
     </Reference>
@@ -264,6 +267,7 @@
     <Compile Include="AdbApi.cs" />
     <Compile Include="AdbClient.cs" />
     <Compile Include="DirectxBot.cs" />
+    <Compile Include="gOcr.cs" />
     <Compile Include="OrleansServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
