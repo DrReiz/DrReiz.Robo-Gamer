@@ -86,6 +86,9 @@
     <Reference Include="NitroBolt.Functional, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NitroBolt.Functional.1.0.42\lib\netstandard1.3\NitroBolt.Functional.dll</HintPath>
     </Reference>
+    <Reference Include="NitroBolt.Immutable, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\NitroBolt.Immutable.1.0.42\lib\netstandard1.3\NitroBolt.Immutable.dll</HintPath>
+    </Reference>
     <Reference Include="OpenCvSharp, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenCvSharp3-AnyCPU.3.4.1.20180319\lib\net46\OpenCvSharp.dll</HintPath>
     </Reference>
@@ -267,6 +270,7 @@
     <Compile Include="AdbApi.cs" />
     <Compile Include="AdbClient.cs" />
     <Compile Include="DirectxBot.cs" />
+    <Compile Include="gOcr.g.cs" />
     <Compile Include="gOcr.cs" />
     <Compile Include="OrleansServer.cs" />
     <Compile Include="Program.cs" />
