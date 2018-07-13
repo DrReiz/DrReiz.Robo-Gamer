@@ -4,18 +4,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using NitroBolt.Functional;
 using NitroBolt.Immutable;
-using Newtonsoft.Json.Linq;
-using ShaniSoft.Drawing;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
 
-namespace DrReiz.GumballGamer
+namespace DrReiz.GumballGamer.Messages
 {
     partial class Shot
     {

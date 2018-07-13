@@ -66,6 +66,11 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
         this.setState({ selectedVisionShot: { name: answer.visionShot } });
         await this.load();
     }
+    async recognizeText(name:string) {
+        let response = await this.post(this.state.game + '/screenshot/' + name + '/ocr-perception', {});
+        let answer = (await response.json()) as PerceptionShot;
+        this.setState({ perception: { ...this.state.perception, perceptionShots: this.state.perception.perceptionShots.concat([answer]) } });
+    }
     async post(url:string, data:any) {
         return await fetch(url, { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json' } });
     }
@@ -98,7 +103,9 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                     }
                 </div>
                 <div className="col-sm-10">
-                    <button onClick={() => { this.toggleGridDisplay() }}>grid</button><button onClick={() => { this.captureScreenshot() }}>capture</button>
+                    <button onClick={() => { this.toggleGridDisplay() }}>grid</button>
+                    <button onClick={() => { this.captureScreenshot() }}>capture</button>
+                    <button onClick={() => { this.recognizeText(this.state.selectedVisionShot.name) }}>recognize text</button>
                     <div style={{ display: 'table-row' }}>
                         <div style={{ width: frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%' }}>AI-Gamer Vision
                         </div>

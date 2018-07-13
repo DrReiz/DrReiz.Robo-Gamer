@@ -37,6 +37,7 @@ namespace DrReiz.GumballGamer.Messages
         Task<string> Ping(string msg);
     }
 
+ 
     //public class OrleansGrain : Orleans.Grain, IGumballPing
     //{
     //    public Task<string> Ping(string msg)

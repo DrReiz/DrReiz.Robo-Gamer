@@ -43,6 +43,25 @@ namespace DrReiz.GumballGamer.Wui.Controllers
             var context = GameContext.Get(game);
             return File(System.IO.File.ReadAllBytes(Path.Combine(context.StorageDir, name + ".png")), "image/png");
         }
+        [HttpPost("/{game}/screenshot/{name}/ocr-perception")]
+        public async Task<IActionResult> OcrPerception(string game, string name)
+        {
+            var context = GameContext.Get(game);
+
+            using (var client = new ClientBuilder()
+                 .UseLocalhostClustering()
+                 //.ConfigureLogging(logging => logging.AddConsole())
+                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(ISample).Assembly).WithReferences())
+                 .Build())
+            {
+                await client.Connect();
+
+                var gocr = client.GetGrain<IGocr>("one");
+                var shot = await gocr.PerceptionText(Path.Combine(context.StorageDir, name + ".png"));
+                return Json(shot);
+            }
+
+        }
 
 
         [HttpGet("/ping")]

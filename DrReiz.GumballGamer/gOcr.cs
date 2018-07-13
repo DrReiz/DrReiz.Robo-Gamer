@@ -8,6 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using DrReiz.GumballGamer.Messages;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace DrReiz.GumballGamer
 {
@@ -15,8 +18,13 @@ namespace DrReiz.GumballGamer
     {
         public static void Execute()
         {
-            var bytes = File.ReadAllBytes(@"t:\Data\Jewel\Screenshots\180709.010331.png");
-            var image = System.Drawing.Bitmap.FromStream(new MemoryStream(bytes));            
+            Console.WriteLine(Recognize(@"t:\Data\Jewel\Screenshots\180709.010331.png"));
+        }
+        public static string Recognize(string path)
+        {
+            var bytes = File.ReadAllBytes(path);
+            var source_image = System.Drawing.Bitmap.FromStream(new MemoryStream(bytes));
+            var image = Invert((Bitmap)source_image);
             var tmpFilename = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".ppm");
             try
             {
@@ -24,40 +32,73 @@ namespace DrReiz.GumballGamer
                 var process = Process.Start(new ProcessStartInfo(@"p:\Tools\gOcr\gocr049.exe", "-f XML " + tmpFilename) { UseShellExecute = false, RedirectStandardOutput = true });
                 var output = process.StandardOutput.ReadToEnd();
                 process.WaitForExit();
-                Console.WriteLine(output);
+                return output;
             }
             finally
             {
                 if (File.Exists(tmpFilename))
                     File.Delete(tmpFilename);
             }
+
         }
-        public static void GocrToPerception() 
+        static Bitmap Invert(Bitmap image)
         {
-            var xgocr = XElement.Parse(File.ReadAllText(@"p:\temp\180709.010331.gocr.xml"));
-            var areas = new List<Area>();
-            foreach (var (xbox,i) in xgocr.Elements("block").Elements("line").Elements("box").Select((xbox,i) => (xbox, i)))
+            var inverted = new Bitmap(image);
+            var data = inverted.LockBits(new Rectangle(0, 0, image.Width, image.Height), System.Drawing.Imaging.ImageLockMode.ReadWrite, System.Drawing.Imaging.PixelFormat.Format32bppArgb);
+            try
             {
-                areas.Add(new Area(int.Parse(xbox.Attribute("x").Value), int.Parse(xbox.Attribute("y").Value), int.Parse(xbox.Attribute("dx").Value), int.Parse(xbox.Attribute("dy").Value),
-                    $"t{i}", xbox.Attribute("value").Value));
+                for (var y = 0; y < data.Height; ++y)
+                {
+                    var line = data.Scan0 + data.Stride * y;
+                    for (var x = 0; x < 4*data.Width; x += 4)
+                    {
+                        var v = (uint)Marshal.ReadInt32(line + x);
+                        //v = (uint)((v & 0xFF000000u) | (0xFFFFFFu - (v & 0xFFFFFFu)));
+                        v = (uint)((v & 0xFF000000u) | (0xFFFFFFu - (v & 0xFFFFFFu)));
+                        Marshal.WriteInt32(line + x, (int)v);
+                    }
+                }
             }
-            var jshot = JObject.FromObject(new Shot("180709.010331", areas.ToArray()));
+            finally
+            {
+                inverted.UnlockBits(data);
+            }
+            inverted.Save(@"p:\temp\inverted.png");
+            return inverted;
+        }
+
+        public static void ToPerception() 
+        {
+            var shot = ToPerception("180709.010331", File.ReadAllText(@"p:\temp\180709.010331.gocr.xml"));
+            var jshot = JObject.FromObject(shot);
             Console.WriteLine(jshot);
             File.WriteAllText(@"p:\temp\180709.010331.perception.json", jshot.ToString());
         }
+        public static Shot ToPerception(string name, string gocrXml)
+        {
+            var xgocr = XElement.Parse(gocrXml);
+            var areas = new List<Area>();
+            foreach (var (xbox, i) in xgocr.Elements("block").Elements("line").Elements("box").Select((xbox, i) => (xbox, i)))
+            {
+                var value = xbox.Attribute("value").Value;
+                if (value == "(PICTURE)")
+                    continue;
+                areas.Add(new Area(int.Parse(xbox.Attribute("x").Value), int.Parse(xbox.Attribute("y").Value), int.Parse(xbox.Attribute("dx").Value), int.Parse(xbox.Attribute("dy").Value),
+                    $"t{i}", value));
+            }
+            return new Shot(name, areas.ToArray());
+        }
     }
-    public partial class Shot
+ 
+
+    public class GocrGrain : Orleans.Grain, IGocr
     {
-        public readonly string shotName;
-        public readonly Area[] areas;
-    }
-    public partial class Area
-    {
-        public readonly int x;
-        public readonly int y;
-        public readonly int width;
-        public readonly int height;
-        public readonly string name;
-        public readonly string value;
+        public async Task<Shot> PerceptionText(string path)
+        {
+            var name = Path.GetFileNameWithoutExtension(path);
+
+            return GOcr.ToPerception(name, GOcr.Recognize(path));
+        }
+
     }
 }

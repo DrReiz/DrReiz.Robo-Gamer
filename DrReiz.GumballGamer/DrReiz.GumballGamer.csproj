@@ -270,7 +270,6 @@
     <Compile Include="AdbApi.cs" />
     <Compile Include="AdbClient.cs" />
     <Compile Include="DirectxBot.cs" />
-    <Compile Include="gOcr.g.cs" />
     <Compile Include="gOcr.cs" />
     <Compile Include="OrleansServer.cs" />
     <Compile Include="Program.cs" />

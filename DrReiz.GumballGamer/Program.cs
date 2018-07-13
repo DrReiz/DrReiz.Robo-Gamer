@@ -22,9 +22,9 @@ namespace DrReiz.GumballGamer
         //https://stackoverflow.com/questions/7527459/android-device-screen-size
         static void Main(string[] args)
         {
-            GOcr.GocrToPerception();
+            //GOcr.ToPerception();
             //GOcr.Execute();
-            return;
+            //return;
             Task.Run(OrleansServer.Execute).Wait();
             return;
             Perception();
