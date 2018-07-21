@@ -24,7 +24,8 @@ namespace DrReiz.GumballGamer
         {
             var bytes = File.ReadAllBytes(path);
             var source_image = System.Drawing.Bitmap.FromStream(new MemoryStream(bytes));
-            var image = Invert((Bitmap)source_image);
+            //var image = Invert((Bitmap)source_image);
+            var image = source_image;
             var tmpFilename = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + ".ppm");
             try
             {
@@ -78,13 +79,20 @@ namespace DrReiz.GumballGamer
         {
             var xgocr = XElement.Parse(gocrXml);
             var areas = new List<Area>();
-            foreach (var (xbox, i) in xgocr.Elements("block").Elements("line").Elements("box").Select((xbox, i) => (xbox, i)))
+            foreach (var (xline, i) in xgocr.Elements("block").Elements("line").Select((xbox, i) => (xbox, i)))
             {
-                var value = xbox.Attribute("value").Value;
-                if (value == "(PICTURE)")
-                    continue;
-                areas.Add(new Area(int.Parse(xbox.Attribute("x").Value), int.Parse(xbox.Attribute("y").Value), int.Parse(xbox.Attribute("dx").Value), int.Parse(xbox.Attribute("dy").Value),
-                    $"t{i}", value));
+                var text = new StringBuilder();
+                foreach (var xbox in xline.Elements())
+                {
+                    var ch = xbox.Name.LocalName == "space" ? " " : xbox.Attribute("value").Value;
+                    if (ch == "(PICTURE)")
+                        continue;
+                    text.Append(ch);
+                }
+                var x = int.Parse(xline.Attribute("x").Value);
+
+                areas.Add(new Area(x, int.Parse(xline.Attribute("y").Value), int.Parse(xline.Attribute("dx").Value), int.Parse(xline.Attribute("dy").Value),
+                    $"t{i}", text.ToString()));
             }
             return new Shot(name, areas.ToArray());
         }
