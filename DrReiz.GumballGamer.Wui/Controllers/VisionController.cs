@@ -99,5 +99,23 @@ namespace DrReiz.GumballGamer.Wui.Controllers
             }
 
         }
+        [HttpPost("/{game}/tap")]
+        public async Task<IActionResult> Tap(string game)
+        {
+            using (var client = new ClientBuilder()
+                 .UseLocalhostClustering()
+                 //.ConfigureLogging(logging => logging.AddConsole())
+                 .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGamer).Assembly).WithReferences())
+                 .Build())
+            {
+                await client.Connect();
+
+                var gameId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
+                var gamer = client.GetGrain<IGamer>(gameId);
+                await gamer.Tap(game, 800, 400);
+                return Json(new {});
+            }
+
+        }
     }
 }

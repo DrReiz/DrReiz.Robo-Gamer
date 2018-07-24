@@ -2,5 +2,5 @@
   "game": "jewel",
   "selectedVisionShot": "171213.233315",
 
-  "games":  ["gumball", "jewel"]
+  "games":  ["gumball", "jewel", "other-game"]
 }

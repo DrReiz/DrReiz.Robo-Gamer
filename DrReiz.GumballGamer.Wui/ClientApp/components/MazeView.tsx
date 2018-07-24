@@ -66,6 +66,10 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
         this.setState({ selectedVisionShot: { name: answer.visionShot } });
         await this.load();
     }
+    async tap() {
+        let response = await this.post(this.state.game + '/tap', {});
+        let answer = (await response.json());
+    }
     async recognizeText(name:string) {
         let response = await this.post(this.state.game + '/screenshot/' + name + '/ocr-perception', {});
         let answer = (await response.json()) as PerceptionShot;
@@ -106,6 +110,7 @@ export class MazeView extends React.Component<RouteComponentProps<{}>, MazeState
                     <button onClick={() => { this.toggleGridDisplay() }}>grid</button>
                     <button onClick={() => { this.captureScreenshot() }}>capture</button>
                     <button onClick={() => { this.recognizeText(this.state.selectedVisionShot.name) }}>recognize text</button>
+                    <button onClick={() => { this.tap() }}>tap</button>
                     <div style={{ display: 'table-row' }}>
                         <div style={{ width: frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%' }}>AI-Gamer Vision
                         </div>

@@ -17,7 +17,8 @@ namespace DrReiz.GumballGamer.Messages
 
         public static readonly GameContext Gumball = new GameContext("gumball", @"t:\Data\Gumball\Screenshots");
         public static readonly GameContext Jewel = new GameContext("jewel", @"t:\Data\Jewel\Screenshots");
-        public static readonly GameContext[] All = new[] { Gumball, Jewel };
+        public static readonly GameContext Other = new GameContext("other-game", @"t:\Data\Other-Game\Screenshots");
+        public static readonly GameContext[] All = new[] { Gumball, Jewel, Other };
 
         public static GameContext Get(string game)
             => All.First(context => context.Game == game);
@@ -26,6 +27,7 @@ namespace DrReiz.GumballGamer.Messages
     public interface IGamer : Orleans.IGrainWithStringKey
     {
         Task<string> CaptureScreenshot(string game);
+        Task Tap(string game, int x, int y);
     }
     public interface IAndroid : Orleans.IGrainWithStringKey
     {

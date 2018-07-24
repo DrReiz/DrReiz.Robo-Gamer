@@ -33,6 +33,10 @@ namespace DrReiz.GumballGamer
             bitmap.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
             return bitmap;
         }
+        public void Tap(int x, int y)
+        {
+            AdbApi.Tap(AdbStream, x, y);
+        }
 
         public void Dispose()
         {

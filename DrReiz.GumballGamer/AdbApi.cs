@@ -91,5 +91,9 @@ namespace DrReiz.GumballGamer
             SendCommandToAdb(stream, "shell:screencap -p");
             return ReplaceDAToA(ReadAll(stream));
         }
+        public static void Tap(System.IO.Stream stream, int x, int y)
+        {
+            RunShellCommand(stream, $"input tap {x} {y}");
+        }
     }
 }
