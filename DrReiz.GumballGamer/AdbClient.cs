@@ -37,6 +37,10 @@ namespace DrReiz.GumballGamer
         {
             AdbApi.Tap(AdbStream, x, y);
         }
+        public void Back()
+        {
+            AdbApi.Back(AdbStream);
+        }
 
         public void Dispose()
         {

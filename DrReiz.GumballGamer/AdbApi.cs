@@ -95,5 +95,9 @@ namespace DrReiz.GumballGamer
         {
             RunShellCommand(stream, $"input tap {x} {y}");
         }
+        public static void Back(System.IO.Stream stream)
+        {
+            RunShellCommand(stream, $"input keyevent 4");
+        }
     }
 }

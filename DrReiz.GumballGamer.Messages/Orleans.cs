@@ -11,9 +11,13 @@ namespace DrReiz.GumballGamer.Messages
         {
             this.Game = game;
             this.StorageDir = storageDir;
+            this.Height = 1600;
+            this.Width = 900;
         }
         public readonly string Game;
         public readonly string StorageDir;
+        public readonly int Width;
+        public readonly int Height;
 
         public static readonly GameContext Gumball = new GameContext("gumball", @"t:\Data\Gumball\Screenshots");
         public static readonly GameContext Jewel = new GameContext("jewel", @"t:\Data\Jewel\Screenshots");

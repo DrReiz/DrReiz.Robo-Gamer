@@ -22,8 +22,29 @@ namespace DrReiz.GumballGamer
         //https://stackoverflow.com/questions/7527459/android-device-screen-size
         static void Main(string[] args)
         {
+            Walker.Execute();
+            return;
+            if (true)
+            {
+                var filenames = new[]
+                {
+                    @"t:\Data\Jewel\Screenshots\180721.004138.png",
+                    @"t:\Data\Jewel\Screenshots\180709.010322.png",
+                    @"t:\Data\Jewel\Screenshots\180709.010049.png",
+                    @"t:\Data\Jewel\Screenshots\180709.005842.png",
+                    @"t:\Data\Jewel\Screenshots\180709.005615.png",
+                    @"t:\Data\Jewel\Screenshots\180709.005604.png",
+                };
+
+                foreach (var filename in filenames)
+                {
+                    var (h, s, v) = Imager.ToHsv(filename);
+                    Console.WriteLine($"{h}, {s}, {v}");
+                }
+            }
             //GOcr.ToPerception();
             //GOcr.Execute();
+            return;
             //return;
             Task.Run(OrleansServer.Execute).Wait();
             return;
@@ -32,7 +53,7 @@ namespace DrReiz.GumballGamer
             MonitorScreenshotsByAdb();
             return;
             var screenshot1 = AdbScreenCapture();
-            System.IO.File.WriteAllBytes("screen-capture.png", screenshot1);
+            System.IO.File.WriteAllBytes("screen -capture.png", screenshot1);
             return;
             MonitorScreenshots();
             return;
