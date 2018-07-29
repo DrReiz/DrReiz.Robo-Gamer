@@ -43,7 +43,11 @@ namespace DrReiz.GumballGamer.Messages
         Task<string> Ping(string msg);
     }
 
- 
+    public static class GameContextHlp
+    {
+        public static string ImageFullPath(this GameContext context, string name) 
+            => System.IO.Path.Combine(context.StorageDir, name + ".png");
+    }
     //public class OrleansGrain : Orleans.Grain, IGumballPing
     //{
     //    public Task<string> Ping(string msg)

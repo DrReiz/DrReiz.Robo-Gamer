@@ -17,6 +17,7 @@ namespace DrReiz.GumballGamer
         }
 
         public Table<Step> Steps;
+        public Table<Hsv> Hsvs;
     }
 
     [Table(Name = "Step")]
@@ -34,5 +35,17 @@ namespace DrReiz.GumballGamer
         public string Action;
         [Column]
         public DateTime Time = DateTime.UtcNow;
+    }
+    [Table(Name = "Hsv")]
+    public class Hsv
+    {
+        [Column(IsPrimaryKey = true)]
+        public string Shot;
+        [Column]
+        public int H;
+        [Column]
+        public int S;
+        [Column]
+        public int V;
     }
 }

@@ -22,6 +22,8 @@ namespace DrReiz.GumballGamer
         //https://stackoverflow.com/questions/7527459/android-device-screen-size
         static void Main(string[] args)
         {
+            //Processor.ToHsv();
+            //return;
             Walker.Execute();
             return;
             if (true)
