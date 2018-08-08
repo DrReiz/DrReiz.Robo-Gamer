@@ -22,8 +22,12 @@ namespace DrReiz.GumballGamer
         //https://stackoverflow.com/questions/7527459/android-device-screen-size
         static void Main(string[] args)
         {
-            //Processor.ToHsv();
-            //return;
+            NitroBolt.CommandLine.CommandLineManager.Process(args, typeof(Program).Assembly);
+            return;
+            Task.Run(OrleansServer.Execute).Wait();
+            return;
+            Processor.ToHsv();
+            return;
             Walker.Execute();
             return;
             if (true)
@@ -48,8 +52,6 @@ namespace DrReiz.GumballGamer
             //GOcr.Execute();
             return;
             //return;
-            Task.Run(OrleansServer.Execute).Wait();
-            return;
             Perception();
             return;
             MonitorScreenshotsByAdb();
