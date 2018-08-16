@@ -303,7 +303,9 @@
     <Compile Include="gOcr.cs" />
     <Compile Include="Imager.cs" />
     <Compile Include="ImageStorage.cs" />
+    <Compile Include="MapController.g.cs" />
     <Compile Include="MapController.cs" />
+    <Compile Include="Mapper.cs" />
     <Compile Include="OrleansServer.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Program.cs" />

@@ -20,7 +20,7 @@ namespace DrReiz.GumballGamer.Messages
         public readonly int Height;
 
         public static readonly GameContext Gumball = new GameContext("gumball", @"t:\Data\Gumball\Screenshots");
-        public static readonly GameContext Jewel = new GameContext("jewel", @"t:\Data\Jewel\Screenshots");
+        public static readonly GameContext Jewel = new GameContext("jewel", @"t:\Data\Jewel\Screenshots");//Jewel Legend
         public static readonly GameContext Other = new GameContext("other-game", @"t:\Data\Other-Game\Screenshots");
         public static readonly GameContext[] All = new[] { Gumball, Jewel, Other };
 
