@@ -12,7 +12,7 @@ namespace DrReiz.GumballGamer
     {
         public static void ToHsv()
         {
-            using (var db = new GamerDataContext())
+            using (var db = new Linq.GamerDataContext())
             {
                 for (; ; )
                 {
@@ -26,13 +26,13 @@ namespace DrReiz.GumballGamer
                         if (!db.Hsvs.Select(hsv => hsv.Shot).Contains(step.Source))
                         {
                             var (h, s, v) = Imager.ToHsv(context.ImageFullPath(step.Source));
-                            db.Hsvs.InsertOnSubmit(new Hsv { Shot = step.Source, H = h, S = s, V = v });
+                            db.Hsvs.InsertOnSubmit(new Linq.Hsv { Shot = step.Source, H = h, S = s, V = v });
                             db.SubmitChanges();
                         }
                         if (!db.Hsvs.Select(hsv => hsv.Shot).Contains(step.Target))
                         {
                             var (h, s, v) = Imager.ToHsv(context.ImageFullPath(step.Target));
-                            db.Hsvs.InsertOnSubmit(new Hsv { Shot = step.Target, H = h, S = s, V = v });
+                            db.Hsvs.InsertOnSubmit(new Linq.Hsv { Shot = step.Target, H = h, S = s, V = v });
                             db.SubmitChanges();
                         }
                     }

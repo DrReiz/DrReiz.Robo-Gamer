@@ -311,6 +311,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Storage.cs" />
+    <Compile Include="Storage.linq.cs" />
     <Compile Include="Walker.g.cs" />
     <Compile Include="Walker.cs" />
   </ItemGroup>

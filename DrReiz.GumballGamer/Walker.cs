@@ -13,7 +13,7 @@ namespace DrReiz.GumballGamer
         {
             var context = GameContext.Get("jewel");
 
-            using (var dataContext = new GamerDataContext())
+            using (var dataContext = new Linq.GamerDataContext())
             {
                 var zeroImage = Adb(adb => adb.CaptureScreenshot());
                 var stateName = ImageStorage.Save(context, zeroImage);
@@ -32,7 +32,7 @@ namespace DrReiz.GumballGamer
                     var image = Adb(adb => adb.CaptureScreenshot());
                     var newStateName = ImageStorage.Save(context, image);
 
-                    dataContext.Steps.InsertOnSubmit(new Step() {Game = context.Game, Source = stateName, Target = newStateName, Action = action.Text() });
+                    dataContext.Steps.InsertOnSubmit(new Linq.Step() {Game = context.Game, Source = stateName, Target = newStateName, Action = action.Text() });
                     dataContext.SubmitChanges();
 
                     stateName = newStateName;

@@ -16,7 +16,7 @@ namespace DrReiz.GumballGamer
         public static void Execute()
         {
             var gameContext = GameContext.Jewel;
-            using (var context = new GamerDataContext())
+            using (var context = new Linq.GamerDataContext())
             {
                 var shotHs = context.Hsvs.Select(hsv => new { hsv.Shot, hsv.H }).ToDictionary(hsv => hsv.Shot, hsv => hsv.H);
 
