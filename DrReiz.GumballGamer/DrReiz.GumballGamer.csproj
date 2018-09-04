@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="linq2db, Version=2.2.0.0, Culture=neutral, PublicKeyToken=e41013125f9e410a, processorArchitecture=MSIL">
+      <HintPath>..\packages\linq2db.2.2.0\lib\net45\linq2db.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.DotNet.PlatformAbstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.DotNet.PlatformAbstractions.2.0.0\lib\net45\Microsoft.DotNet.PlatformAbstractions.dll</HintPath>
     </Reference>
@@ -310,8 +313,8 @@
     <Compile Include="Processor.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Storage.cs" />
-    <Compile Include="Storage.linq.cs" />
+    <Compile Include="Data\Storage.cs" />
+    <Compile Include="Data\Storage.linq.cs" />
     <Compile Include="Walker.g.cs" />
     <Compile Include="Walker.cs" />
   </ItemGroup>
@@ -328,6 +331,9 @@
       <Project>{eb468f61-bbaf-4561-acdf-18f8bb4194a1}</Project>
       <Name>DrReiz.GumballGamer.Messages</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data.Sql\Data.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
