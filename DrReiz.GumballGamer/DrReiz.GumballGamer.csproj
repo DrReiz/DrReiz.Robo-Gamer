@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\linq2db.SqlServer.2.3.0\build\linq2db.SqlServer.props" Condition="Exists('..\packages\linq2db.SqlServer.2.3.0\build\linq2db.SqlServer.props')" />
   <Import Project="..\packages\OpenCvSharp3-AnyCPU.3.4.1.20180319\build\OpenCvSharp3-AnyCPU.props" Condition="Exists('..\packages\OpenCvSharp3-AnyCPU.3.4.1.20180319\build\OpenCvSharp3-AnyCPU.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -35,8 +36,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="linq2db, Version=2.2.0.0, Culture=neutral, PublicKeyToken=e41013125f9e410a, processorArchitecture=MSIL">
-      <HintPath>..\packages\linq2db.2.2.0\lib\net45\linq2db.dll</HintPath>
+    <Reference Include="linq2db, Version=2.3.0.0, Culture=neutral, PublicKeyToken=e41013125f9e410a, processorArchitecture=MSIL">
+      <HintPath>..\packages\linq2db.2.3.0\lib\net45\linq2db.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.DotNet.PlatformAbstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.DotNet.PlatformAbstractions.2.0.0\lib\net45\Microsoft.DotNet.PlatformAbstractions.dll</HintPath>
@@ -322,6 +323,22 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="LinqToDB.Templates\DataAnnotations.ttinclude" />
+    <None Include="LinqToDB.Templates\DataModel.ttinclude" />
+    <None Include="LinqToDB.Templates\EditableObject.ttinclude" />
+    <None Include="LinqToDB.Templates\Humanizer.ttinclude" />
+    <None Include="LinqToDB.Templates\LinqToDB.SqlServer.SqlTypes.Tools.ttinclude" />
+    <None Include="LinqToDB.Templates\LinqToDB.SqlServer.Tools.ttinclude" />
+    <None Include="LinqToDB.Templates\LinqToDB.SqlServer.ttinclude" />
+    <None Include="LinqToDB.Templates\LinqToDB.Tools.ttinclude" />
+    <None Include="LinqToDB.Templates\LinqToDB.ttinclude" />
+    <None Include="LinqToDB.Templates\MultipleFiles.ttinclude" />
+    <None Include="LinqToDB.Templates\NotifyDataErrorInfo.ttinclude" />
+    <None Include="LinqToDB.Templates\NotifyPropertyChanged.ttinclude" />
+    <None Include="LinqToDB.Templates\ObsoleteAttributes.ttinclude" />
+    <None Include="LinqToDB.Templates\PluralizationService.ttinclude" />
+    <None Include="LinqToDB.Templates\T4Model.ttinclude" />
+    <None Include="LinqToDB.Templates\Validation.ttinclude" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -334,6 +351,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Data.Sql\Data.sql" />
+    <Content Include="LinqToDB.Templates\CopyMe.SqlServer.tt.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -342,6 +360,7 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\OpenCvSharp3-AnyCPU.3.4.1.20180319\build\OpenCvSharp3-AnyCPU.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\OpenCvSharp3-AnyCPU.3.4.1.20180319\build\OpenCvSharp3-AnyCPU.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.Orleans.OrleansCodeGenerator.Build.2.0.3\build\Microsoft.Orleans.OrleansCodeGenerator.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Orleans.OrleansCodeGenerator.Build.2.0.3\build\Microsoft.Orleans.OrleansCodeGenerator.Build.targets'))" />
+    <Error Condition="!Exists('..\packages\linq2db.SqlServer.2.3.0\build\linq2db.SqlServer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\linq2db.SqlServer.2.3.0\build\linq2db.SqlServer.props'))" />
   </Target>
   <Import Project="..\packages\Microsoft.Orleans.OrleansCodeGenerator.Build.2.0.3\build\Microsoft.Orleans.OrleansCodeGenerator.Build.targets" Condition="Exists('..\packages\Microsoft.Orleans.OrleansCodeGenerator.Build.2.0.3\build\Microsoft.Orleans.OrleansCodeGenerator.Build.targets')" />
 </Project>

@@ -10,9 +10,9 @@ namespace DrReiz.GumballGamer
 {
     public class GamerDataContext: LinqToDB.Data.DataConnection
     {
-        public static readonly string DefaultConnectionString = @"Server=localhost;Database=RoboGamer;Trusted_Connection=True;";
+        //public static readonly string DefaultConnectionString = @"Server=localhost;Database=RoboGamer;Trusted_Connection=True;";
         public GamerDataContext(string connectionString = null)
-            : base(connectionString ?? DefaultConnectionString)
+            : base(connectionString ?? "RoboGamer")
         {
         }
 

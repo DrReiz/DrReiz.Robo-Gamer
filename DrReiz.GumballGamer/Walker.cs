@@ -4,16 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DrReiz.GumballGamer.Messages;
+using LinqToDB;
+using NitroBolt.CommandLine;
 
 namespace DrReiz.GumballGamer
 {
     class Walker
     {
+        [CommandLine("walk")]
         public static void Execute()
         {
             var context = GameContext.Get("jewel");
 
-            using (var dataContext = new Linq.GamerDataContext())
+            using (var dataContext = new GamerDataContext())
             {
                 var zeroImage = Adb(adb => adb.CaptureScreenshot());
                 var stateName = ImageStorage.Save(context, zeroImage);
@@ -32,8 +35,7 @@ namespace DrReiz.GumballGamer
                     var image = Adb(adb => adb.CaptureScreenshot());
                     var newStateName = ImageStorage.Save(context, image);
 
-                    dataContext.Steps.InsertOnSubmit(new Linq.Step() {Game = context.Game, Source = stateName, Target = newStateName, Action = action.Text() });
-                    dataContext.SubmitChanges();
+                    dataContext.Insert(new Step() {Game = context.Game, Source = stateName, Target = newStateName, Action = action.Text() });
 
                     stateName = newStateName;
                 }
@@ -43,7 +45,7 @@ namespace DrReiz.GumballGamer
         static Action GetAction(Random rnd, GameContext context) 
             => 
             rnd.Next(10) == 0 
-            ? new Action(0, 0, true) 
+            ? Action.Back 
             : new Action(rnd.Next(context.Width), rnd.Next(context.Height), false);
         
 
@@ -73,5 +75,7 @@ namespace DrReiz.GumballGamer
             else
                 adb.Tap(X, Y);
         }
+
+        public static Action Back = new Action(0, 0, true);
     }
 }
