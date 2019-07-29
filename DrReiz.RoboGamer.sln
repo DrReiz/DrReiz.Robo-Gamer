@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrReiz.GumballGamer.Message
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrReiz.Gamer.DevConsole", "DrReiz.Gamer.DevConsole\DrReiz.Gamer.DevConsole.csproj", "{6847A7C7-C390-4DBC-A77D-497D6098F17B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrReiz.AndroidGamer.Wui", "DrReiz.AndroidGamer.Wui\DrReiz.AndroidGamer.Wui.csproj", "{7C536986-F126-4719-8F99-77DD82FE170D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{6847A7C7-C390-4DBC-A77D-497D6098F17B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6847A7C7-C390-4DBC-A77D-497D6098F17B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6847A7C7-C390-4DBC-A77D-497D6098F17B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C536986-F126-4719-8F99-77DD82FE170D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C536986-F126-4719-8F99-77DD82FE170D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C536986-F126-4719-8F99-77DD82FE170D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C536986-F126-4719-8F99-77DD82FE170D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
