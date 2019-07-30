@@ -57,13 +57,16 @@ namespace DrReiz.Gamer.DevConsole
                 BootstrapServers = "velomobile-01.srvs.cloudkafka.com:9094,velomobile-02.srvs.cloudkafka.com:9094,velomobile-03.srvs.cloudkafka.com:9094",
                 SaslUsername = "fb69vbgp",
                 SaslPassword = "h6GYYEvURKBsshRdGeVQXN7-1tUIu9rE",
+
+                SaslMechanism = SaslMechanism.ScramSha256,
+                SecurityProtocol = SecurityProtocol.SaslSsl,
+
                 // Note: The AutoOffsetReset property determines the start offset in the event
                 // there are not yet any committed offsets for the consumer group for the
                 // topic/partitions of interest. By default, offsets are committed
                 // automatically, so in this example, consumption will only start from the
                 // earliest message in the topic 'my-topic' the first time you run the program.
-                //AutoOffsetReset = AutoOffsetReset.Earliest,
-                AutoOffsetReset = AutoOffsetReset.Latest,
+                AutoOffsetReset = AutoOffsetReset.Earliest,
             };
 
             using (var c = new ConsumerBuilder<Ignore, string>(conf).Build())
