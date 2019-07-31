@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace drreiz_android_gamer_wui
+namespace DrReiz.AndroidGamer.Wui
 {
     public class Program
     {

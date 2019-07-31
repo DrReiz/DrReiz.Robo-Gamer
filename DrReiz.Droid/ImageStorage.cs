@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DrReiz.GumballGamer.Messages;
 
-namespace DrReiz.GumballGamer
+namespace DrReiz.Droid
 {
-    [Obsolete("moved to DrReiz.Droid"]
     public static class ImageStorage
     {
         public static string Save(GameContext context, System.Drawing.Bitmap bitmap)

@@ -5,9 +5,15 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DrReiz.GumballGamer
+namespace DrReiz.Droid
 {
-    [Obsolete("moved to DrReiz.Droid")]
+    //C:\Users\Serge\AppData\Local\Android\sdk\platform-tools >  adb start-server
+    //adb devices -- посмотреть список устройств
+    //adb kill-server -- с последующим start-server, помогает увидеть blue-stacks
+    //
+    //посмотреть текущее разрешение
+    //adb shell dumpsys displays
+    //https://stackoverflow.com/questions/7527459/android-device-screen-size
     public class AdbClient:IDisposable
     {
         public static readonly int AdbPort_Default = 5037;

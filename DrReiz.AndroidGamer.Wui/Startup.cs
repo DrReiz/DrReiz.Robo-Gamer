@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace drreiz_android_gamer_wui
+namespace DrReiz.AndroidGamer.Wui
 {
     public class Startup
     {

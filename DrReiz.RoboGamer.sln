@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrReiz.Gamer.DevConsole", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DrReiz.AndroidGamer.Wui", "DrReiz.AndroidGamer.Wui\DrReiz.AndroidGamer.Wui.csproj", "{7C536986-F126-4719-8F99-77DD82FE170D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrReiz.Droid", "DrReiz.Droid\DrReiz.Droid.csproj", "{8EDC238B-076F-467A-9C41-A73595DBB4BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{7C536986-F126-4719-8F99-77DD82FE170D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C536986-F126-4719-8F99-77DD82FE170D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C536986-F126-4719-8F99-77DD82FE170D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EDC238B-076F-467A-9C41-A73595DBB4BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EDC238B-076F-467A-9C41-A73595DBB4BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EDC238B-076F-467A-9C41-A73595DBB4BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EDC238B-076F-467A-9C41-A73595DBB4BC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

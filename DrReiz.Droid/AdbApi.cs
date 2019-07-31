@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DrReiz.GumballGamer
+namespace DrReiz.Droid
 {
-    [Obsolete("moved to DrReiz.Droid")]
     public static class AdbApi
     {
         public static byte[] ReplaceDAToA(byte[] bytes)

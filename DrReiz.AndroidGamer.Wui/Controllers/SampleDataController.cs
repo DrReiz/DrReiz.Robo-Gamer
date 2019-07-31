@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace drreiz_android_gamer_wui.Controllers
+namespace DrReiz.AndroidGamer.Wui.Controllers
 {
     [Route("api/[controller]")]
     public class SampleDataController : Controller
