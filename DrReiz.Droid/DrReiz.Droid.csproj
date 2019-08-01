@@ -69,11 +69,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdbApi.cs" />
-    <Compile Include="AdbClient.cs" />
-    <Compile Include="AdbDroid.cs" />
-    <Compile Include="GameContext.cs" />
-    <Compile Include="ImageStorage.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

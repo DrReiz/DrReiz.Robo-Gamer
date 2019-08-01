@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DrReiz.Droid
+namespace DrReiz.AndroidGamer.Wui
 {
     public class GameContext
     {

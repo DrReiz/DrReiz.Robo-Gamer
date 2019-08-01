@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DrReiz.Droid
+namespace DrReiz.AndroidGamer.Wui
 {
     //C:\Users\Serge\AppData\Local\Android\sdk\platform-tools >  adb start-server
     //adb devices -- посмотреть список устройств
