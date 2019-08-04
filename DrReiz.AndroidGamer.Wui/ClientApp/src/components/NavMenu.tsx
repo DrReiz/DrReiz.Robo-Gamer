@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Collapse, Container, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink } from 'reactstrap';
-import { Link } from 'react-router-dom';
+import { Link, NavLink as RouterNavLink } from 'react-router-dom';
 import './NavMenu.css';
 
 export class NavMenu extends Component<{}, { collapsed: boolean }> {
@@ -31,10 +31,10 @@ export class NavMenu extends Component<{}, { collapsed: boolean }> {
             <Collapse className="d-sm-inline-flex flex-sm-row-reverse" isOpen={!this.state.collapsed} navbar>
               <ul className="navbar-nav flex-grow">
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/">Home</NavLink>
+                  <RouterNavLink exact to='/' className='nav-link' activeClassName='active'>Home</RouterNavLink>
                 </NavItem>
                 <NavItem>
-                  <NavLink tag={Link} className="text-dark" to="/vision">Vision</NavLink>
+                  <RouterNavLink to='/vision' className='nav-link' activeClassName='active'>Vision</RouterNavLink>
                 </NavItem>
               </ul>
             </Collapse>
