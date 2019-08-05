@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace DrReiz.AndroidGamer.Wui
 {
@@ -20,6 +21,8 @@ namespace DrReiz.AndroidGamer.Wui
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            ConfigureSerilog(@"Logs\log-.txt");
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             // In production, the React files will be served from this directory
@@ -63,6 +66,20 @@ namespace DrReiz.AndroidGamer.Wui
                     spa.UseReactDevelopmentServer(npmScript: "start");
                 }
             });
+        }
+
+        static void ConfigureSerilog(string logPath)
+        {
+            var log = new LoggerConfiguration()
+                    .WriteTo.File(logPath, outputTemplate: "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}{NewLine}", rollingInterval: RollingInterval.Day)
+                    .CreateLogger();
+            Log.Logger = log;
+
+            log.Information("{0}{0}{0}{1}{0}", System.Environment.NewLine,
+                "<===============================================================================>"
+            );
+
+            log.Information("LogStarting");
         }
     }
 }

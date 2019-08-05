@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -35,10 +37,24 @@ namespace DrReiz.AndroidGamer.Wui
 
         public System.Drawing.Bitmap CaptureScreenshot()
         {
+            var watch = new Stopwatch();
+            watch.Start();
+
             var bytes = AdbApi.CaptureScreenshot(AdbStream);
+
+            var captureTime = watch.Elapsed;
+            watch.Reset();
+
+            watch.Start();
             var bitmap = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(new System.IO.MemoryStream(bytes));
             bitmap.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
+
+            var rotateTime = watch.Elapsed;
+
+            Log.Information("Capture {captureTime}, {rotateTime}", captureTime, rotateTime);
+
             return bitmap;
+
         }
         public void Tap(int x, int y)
         {
