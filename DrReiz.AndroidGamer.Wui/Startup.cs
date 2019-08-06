@@ -1,3 +1,4 @@
+using DrReiz.AndroidGamer.Wui.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +31,11 @@ namespace DrReiz.AndroidGamer.Wui
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            services.AddSingleton(provider =>
+            {
+                return new GamerDataContext(Configuration.GetConnectionString("GamerDb"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,6 +51,8 @@ namespace DrReiz.AndroidGamer.Wui
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            app.UseUnhandledErrorLogging();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

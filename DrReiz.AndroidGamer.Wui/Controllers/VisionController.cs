@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using LinqToDB;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,12 +11,14 @@ namespace DrReiz.AndroidGamer.Wui.Controllers
 {
     public class VisionController: Controller
     {
-        public VisionController(IHostingEnvironment hostingEnvironment)
+        public VisionController(IHostingEnvironment hostingEnvironment, GamerDataContext dataContext)
         {
             this.hostingEnvironment = hostingEnvironment;
+            this.DataContext = dataContext;
         }
 
         IHostingEnvironment hostingEnvironment;
+        GamerDataContext DataContext;
 
         [HttpGet("/{game}/visionShots/")]
         public object Shots(string game)
@@ -83,22 +86,17 @@ namespace DrReiz.AndroidGamer.Wui.Controllers
         [HttpPost("/{game}/screenshot/capture")]
         public IActionResult CaptureScreenshot(string game)
         {
-            var screenshotName = AdbDroid.CaptureScreenshot(game);
+            var screenshotName = CaptureByAction(game, null);
+
             return Json(new { visionShot= screenshotName });
 
-            //using (var client = new ClientBuilder()
-            //     .UseLocalhostClustering()
-            //     //.ConfigureLogging(logging => logging.AddConsole())
-            //     .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGamer).Assembly).WithReferences())
-            //     .Build())
-            //{
-            //    await client.Connect();
+        }
+        [HttpPost("/{game}/wait-capture")]
+        public IActionResult WaitAndCapture(string game)
+        {
+            var screenshotName = CaptureByAction(game, "wait");
 
-            //    var gameId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
-            //    var gamer = client.GetGrain<IGamer>(gameId);
-            //    var name = await gamer.CaptureScreenshot(game);
-            //    return Json(new { visionShot= name });
-            //}
+            return Json(new { visionShot = screenshotName });
 
         }
         [HttpPost("/{game}/tap")]
@@ -107,21 +105,32 @@ namespace DrReiz.AndroidGamer.Wui.Controllers
             AdbDroid.Tap(game, request.X, request.Y);
             return Json(new {});
 
-            //using (var client = new ClientBuilder()
-            //     .UseLocalhostClustering()
-            //     //.ConfigureLogging(logging => logging.AddConsole())
-            //     .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(IGamer).Assembly).WithReferences())
-            //     .Build())
-            //{
-            //    await client.Connect();
+        }
+        [HttpPost("/{game}/tap-capture")]
+        public IActionResult TapAndCapture(string game, [FromBody]TapRequest request)
+        {
+            AdbDroid.Tap(game, request.X, request.Y);
 
-            //    var gameId = new Guid("{2349992C-860A-4EDA-9590-000000000006}").ToString();
-            //    var gamer = client.GetGrain<IGamer>(gameId);
-            //    await gamer.Tap(game, 800, 400);
-            //    return Json(new {});
-            //}
+            CaptureByAction(game, $"{request.X};{request.Y}");
+
+            var screenshotName = CaptureByAction(game, "wait");
+
+            return Json(new { visionShot = screenshotName });
 
         }
+
+        public string CaptureByAction(string game, string action)
+        {
+            var screenshotName = AdbDroid.CaptureScreenshot(game);
+            var step = new Step { Game = game, Action = action, Source = previousStep?.Target, Target = screenshotName };
+            if (action != null && previousStep?.Game == game && step.Time < previousStep.Time.AddMinutes(1))
+                DataContext.Insert(step);
+
+            previousStep = step;
+
+            return screenshotName;
+        }
+        static Step previousStep = null;
     }
     public class TapRequest
     {

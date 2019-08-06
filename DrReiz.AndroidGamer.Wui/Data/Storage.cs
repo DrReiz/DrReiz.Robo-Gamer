@@ -6,14 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DrReiz.GumballGamer
+namespace DrReiz.AndroidGamer.Wui
 {
-    [Obsolete("moved to AndroidGamer.Wui")]
     public class GamerDataContext: LinqToDB.Data.DataConnection
     {
-        //public static readonly string DefaultConnectionString = @"Server=localhost;Database=RoboGamer;Trusted_Connection=True;";
         public GamerDataContext(string connectionString = null)
-            : base(connectionString ?? "RoboGamer")
+            : base("SqlServer", connectionString ?? "RoboGamer")
         {
         }
 

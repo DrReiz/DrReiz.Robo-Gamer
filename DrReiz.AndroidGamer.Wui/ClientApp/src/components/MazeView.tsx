@@ -67,9 +67,23 @@ export class MazeView extends Component<{}, MazeState> {
     this.setState({ selectedVisionShot: { name: answer.visionShot } });
     await this.load();
   }
+  async waitCaptureScreenshot() {
+    let response = await this.post(this.state.game + '/wait-capture', {});
+    let answer = (await response.json());
+    this.setState({ selectedVisionShot: { name: answer.visionShot } });
+    await this.load();
+  }
+
   async tap(p: { x: number, y: number }) {
     let response = await axios.post(this.state.game + '/tap', { x: Math.round(p.x), y: Math.round(p.y) });
     let answer = (await response.data);
+  }
+  async tapCapture(p: { x: number, y: number }) {
+    let response = await axios.post(this.state.game + '/tap-capture', { x: Math.round(p.x), y: Math.round(p.y) });
+    let answer = (await response.data);
+
+    this.setState({ selectedVisionShot: { name: answer.visionShot } });
+    await this.load();
   }
   async recognizeText(name: string) {
     let response = await this.post(this.state.game + '/screenshot/' + name + '/ocr-perception', {});
@@ -90,7 +104,7 @@ export class MazeView extends Component<{}, MazeState> {
     const y = imgY / k;
 
     console.log(x, y);
-    await this.tap({ x:x, y:y });
+    await this.tapCapture({ x:x, y:y });
   }
 
 
@@ -124,6 +138,7 @@ export class MazeView extends Component<{}, MazeState> {
         <div className="col-sm-10">
           <Button onClick={() => { this.toggleGridDisplay() }}>grid</Button>{' '}
           <Button onClick={() => { this.captureScreenshot() }}>capture</Button>{' '}
+          <Button onClick={() => { this.waitCaptureScreenshot() }}>wait-capture</Button>{' '}
           <Button onClick={() => { this.recognizeText(this.state.selectedVisionShot.name) }}>recognize text</Button>{' '}
           <div style={{ display: 'table-row' }}>
             <div style={{ width: frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%' }}>AI-Gamer Vision
