@@ -29,12 +29,14 @@
 
   <ItemGroup>
     <None Remove="ClientApp\public\data\setting.json" />
+    <None Remove="Data.Sql\Data.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="ClientApp\public\data\setting.json">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <Content Include="Data.Sql\Data.sql" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

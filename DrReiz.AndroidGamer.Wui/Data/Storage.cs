@@ -18,6 +18,7 @@ namespace DrReiz.AndroidGamer.Wui
         public ITable<Step> Steps => GetTable<Step>();
         public ITable<Hsv> Hsvs => GetTable<Hsv>();
         public ITable<Processing> Processings => GetTable<Processing>();
+        public ITable<ShotCategory> ShotCategories => GetTable<ShotCategory>();
 
     }
 
@@ -55,7 +56,7 @@ namespace DrReiz.AndroidGamer.Wui
     public class Processing
     {
         [PrimaryKey]
-        public Guid Id;
+        public Guid Id = Guid.NewGuid();
         [Column]
         public string Name;
         [Column]
@@ -66,5 +67,17 @@ namespace DrReiz.AndroidGamer.Wui
         [Column]
         public DateTime UpdateTime;
     }
+    [Table(Name ="ShotCategory")]
+    public class ShotCategory
+    {
+        [PrimaryKey]
+        public Guid Id = Guid.NewGuid();
+        [Column]
+        public string Shot;
+        [Column]
+        public string Category;
 
+        [Column]
+        public DateTime ChangeTick = DateTime.UtcNow;
+    }
 }

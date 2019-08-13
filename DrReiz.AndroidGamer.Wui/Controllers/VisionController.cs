@@ -131,10 +131,28 @@ namespace DrReiz.AndroidGamer.Wui.Controllers
             return screenshotName;
         }
         static Step previousStep = null;
+
+        [HttpPut("/shot/{name}/category")]
+        public object PutShotCategory(string name, [FromBody] PutShotCategoryRequest request)
+        {
+            DataContext.Insert(new ShotCategory { Shot = name, Category = request.Category });
+            return new { };
+        }
+        [HttpGet("/shot/{name}")]
+        public object Shot(string name)
+        {
+            var categories = DataContext.ShotCategories.Where(category => category.Shot == name).ToArray();
+            return new { Categories = categories.Select(category => new { Name = category.Category }) };
+        }
+
     }
     public class TapRequest
     {
         public int X;
         public int Y;
+    }
+    public class PutShotCategoryRequest
+    {
+        public string Category;
     }
 }

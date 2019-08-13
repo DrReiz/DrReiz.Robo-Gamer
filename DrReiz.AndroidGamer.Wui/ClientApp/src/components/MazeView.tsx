@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
-import { Button, Spinner } from 'reactstrap';
+import { Button, Spinner, Input } from 'reactstrap';
 import axios from 'axios'
+import { optional } from 'optional-chain'
 
 interface MazeState {
-    game: string;
-    is_grid_display: boolean;
-    selectedVisionShot: VisionShot;
-    visionShots: VisionShot[];
-    perception: Perception;
+  game: string;
+  is_grid_display: boolean;
+  selectedVisionShot: VisionShot;
+  visionShots: VisionShot[];
+  perception: Perception;
+
+  shotCategory?: string;
 }
 interface VisionShot {
-    name: string;
+  name: string;
+  categories?: { name: string }[];
 }
 
+function orEmpty(s?: string) {
+  if (s == null)
+    return '';
+  return s;
+}
 
 export class MazeView extends Component<{}, MazeState> {
   constructor(props: any) {
@@ -56,6 +65,15 @@ export class MazeView extends Component<{}, MazeState> {
 
     this.setState({ visionShots: visionShots });
   }
+  async loadShot(shot?: string) {
+    if (shot == null)
+      return;
+
+    let response = await axios.get(`/shot/${shot}`);
+
+    this.setState({ selectedVisionShot: { ...this.state.selectedVisionShot, ...response.data } });
+  }
+
   async loadPerception() {
     let response = await fetch('data/' + this.state.game + '.perception.json');
     let perception = (await response.json()) as Perception;
@@ -107,6 +125,15 @@ export class MazeView extends Component<{}, MazeState> {
     await this.tapCapture({ x:x, y:y });
   }
 
+  async applyCategory(shot: string, category?: string) {
+    if (category == null)
+      return;
+
+    let response = await axios.put(`/shot/${shot}/category`, { category:category });
+    let answer = (await response.data);
+
+    await this.loadShot(this.state.selectedVisionShot.name);
+  }
 
   public render() {
     //let visionShotFilenames = ["171213.233408.png", "171213.233335.png", "171213.233229.png"];
@@ -140,6 +167,10 @@ export class MazeView extends Component<{}, MazeState> {
           <Button onClick={() => { this.captureScreenshot() }}>capture</Button>{' '}
           <Button onClick={() => { this.waitCaptureScreenshot() }}>wait-capture</Button>{' '}
           <Button onClick={() => { this.recognizeText(this.state.selectedVisionShot.name) }}>recognize text</Button>{' '}
+          <Input style={{ width: '100px', display:'inline-block' }} name='shotCategory' value={orEmpty(this.state.shotCategory)} onChange={this.handleChange} />{' '}
+          <Button onClick={() => { this.applyCategory(this.state.selectedVisionShot.name, this.state.shotCategory) }}>apply category</Button>{' '}
+          {optional(this.state.selectedVisionShot).k('categories').getOrElse([]).map((category, k) => <span key={k}>{`${optional(category).k('name').get()} `}</span>)}
+
           <div style={{ display: 'table-row' }}>
             <div style={{ width: frame.width, display: 'table-cell', textAlign: 'center', fontSize: '150%' }}>AI-Gamer Vision
                         </div>
@@ -181,6 +212,19 @@ export class MazeView extends Component<{}, MazeState> {
 
     </div>;
   }
+  handleChange = (event: React.ChangeEvent<HTMLInputElement>, sourceName?: string) => {
+    const { target } = event;
+    let value: string | (string | undefined)[] = target.value;
+
+    const name = target.name as keyof MazeState;
+
+    const request = {
+      [name]: value
+    };
+
+    this.setState(request as any);
+  }
+
   static IsFloat(name: string | undefined): boolean {
     return name != null && !name.startsWith('cell-');
   }
@@ -229,6 +273,8 @@ export class MazeView extends Component<{}, MazeState> {
     this.setState({
       selectedVisionShot: shot
     });
+
+    this.loadShot(optional(shot).k('name').get());
   }
 
 
