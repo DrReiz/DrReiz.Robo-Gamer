@@ -86,9 +86,19 @@ namespace DrReiz.AndroidGamer.Wui
         {
             return Encoding.UTF8.GetString(ReadAll(stream));
         }
-        public static byte[] CaptureScreenshot(System.IO.Stream stream)
+        public static byte[] CaptureScreenshotAsPng(System.IO.Stream stream)
         {
             SendCommandToAdb(stream, "shell:screencap -p");
+            return ReplaceDAToA(ReadAll(stream));
+        }
+        public static byte[] CaptureScreenshot(System.IO.Stream stream)
+        {
+            SendCommandToAdb(stream, "shell:screencap");
+            return ReplaceDAToA(ReadAll(stream));
+        }
+        public static byte[] CaptureFramebuffer(System.IO.Stream stream)
+        {
+            SendCommandToAdb(stream, "pull /dev/graphics/fb0");
             return ReplaceDAToA(ReadAll(stream));
         }
         public static void Tap(System.IO.Stream stream, int x, int y)

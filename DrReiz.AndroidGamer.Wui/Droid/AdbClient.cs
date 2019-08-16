@@ -42,11 +42,17 @@ namespace DrReiz.AndroidGamer.Wui
 
             var bytes = AdbApi.CaptureScreenshot(AdbStream);
 
+            //System.IO.File.WriteAllBytes(@"p:\temp\q1.png", bytes);
+
             var captureTime = watch.Elapsed;
             watch.Reset();
+            //Log.Information("Capture {captureTime}", captureTime);
 
             watch.Start();
-            var bitmap = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(new System.IO.MemoryStream(bytes));
+
+            var bitmap = LoadRawBitmap(bytes);
+
+            //var bitmap = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(new System.IO.MemoryStream(bytes));
             bitmap.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
 
             var rotateTime = watch.Elapsed;
@@ -54,6 +60,25 @@ namespace DrReiz.AndroidGamer.Wui
             Log.Information("Capture {captureTime}, {rotateTime}", captureTime, rotateTime);
 
             return bitmap;
+
+        }
+        unsafe static System.Drawing.Bitmap LoadRawBitmap(byte[] data)
+        {
+            var width = BitConverter.ToInt32(data, 0);
+            var height = BitConverter.ToInt32(data, 4);
+            //Log.Information("Image: {width}, {height}, {bytes}", width, height, data.Length);
+            fixed (byte * p = data)
+            {
+                var image = p + 12;
+                for (var i = 0; i < data.Length - 12; i += 4)
+                {
+                    var b = image[i];
+                    image[i] = image[i+2];
+                    image[i + 2] = b;
+                }
+                var bitmap =  new System.Drawing.Bitmap(width, height, 4*width, System.Drawing.Imaging.PixelFormat.Format32bppRgb, new IntPtr(image));
+                return new System.Drawing.Bitmap(bitmap);
+            }
 
         }
         public void Tap(int x, int y)

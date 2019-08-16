@@ -10,6 +10,10 @@
     <RootNamespace>DrReiz.AndroidGamer.Wui</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Confluent.Kafka" Version="1.1.0" />
     <PackageReference Include="linq2db" Version="2.8.1" />

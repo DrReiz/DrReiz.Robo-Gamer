@@ -7,7 +7,7 @@ using DrReiz.GumballGamer.Messages;
 
 namespace DrReiz.GumballGamer
 {
-    [Obsolete("moved to DrReiz.Droid"]
+    [Obsolete("moved to DrReiz.Droid")]
     public static class ImageStorage
     {
         public static string Save(GameContext context, System.Drawing.Bitmap bitmap)
