@@ -6,7 +6,7 @@ import { optional } from 'optional-chain'
 interface MazeState {
   game: string;
   is_grid_display: boolean;
-  selectedVisionShot: VisionShot;
+  selectedVisionShot?: VisionShot;
   visionShots: VisionShot[];
   perception: Perception;
 
@@ -32,9 +32,6 @@ export class MazeView extends Component<{}, MazeState> {
         is_grid_display: false,
         //img_name: "171213.233335.png",
         //img_name: "171213.233408.png",
-        selectedVisionShot: {
-          name: "171213.233408",
-        },
         visionShots: [],
         perception: {
           frame: {
@@ -132,7 +129,8 @@ export class MazeView extends Component<{}, MazeState> {
     let response = await axios.put(`/shot/${shot}/category`, { category:category });
     let answer = (await response.data);
 
-    await this.loadShot(this.state.selectedVisionShot.name);
+    if (this.state.selectedVisionShot != null)
+      await this.loadShot(this.state.selectedVisionShot.name);
   }
 
   public render() {
@@ -142,7 +140,9 @@ export class MazeView extends Component<{}, MazeState> {
 
     let maze = this.state.perception;
 
-    let visionFrame = maze.perceptionShots.find(shot => shot.shotName == this.state.selectedVisionShot.name);
+    const selectedShotName = optional(this.state.selectedVisionShot).k('name').get();//.match({ some: v => v, none: _ => null });
+
+    let visionFrame = maze.perceptionShots.find(shot => shot.shotName == selectedShotName);
 
     let resizeK = 0.4;
     let frame = MazeView.ResizeFrame(maze.frame, resizeK);
@@ -156,7 +156,7 @@ export class MazeView extends Component<{}, MazeState> {
         <div className="col-sm-2" style={{ height: "900px", overflowY: "scroll" }}>
           {
             visionShots.map((shot, k) =>
-              <div key={k} style={{ color: shot.name == this.state.selectedVisionShot.name ? "blue" : "inherit", cursor: "pointer" }} onClick={() => { this.selectVisionShot(shot) }}>
+              <div key={k} style={{ color: shot.name == selectedShotName ? "blue" : "inherit", cursor: "pointer" }} onClick={() => { this.selectVisionShot(shot) }}>
                 {shot.name}
               </div>
             )
@@ -166,9 +166,9 @@ export class MazeView extends Component<{}, MazeState> {
           <Button onClick={() => { this.toggleGridDisplay() }}>grid</Button>{' '}
           <Button onClick={() => { this.captureScreenshot() }}>capture</Button>{' '}
           <Button onClick={() => { this.waitCaptureScreenshot() }}>wait-capture</Button>{' '}
-          <Button onClick={() => { this.recognizeText(this.state.selectedVisionShot.name) }}>recognize text</Button>{' '}
+          <Button onClick={() => { this.recognizeText(selectedShotName) }}>recognize text</Button>{' '}
           <Input style={{ width: '100px', display:'inline-block' }} name='shotCategory' value={orEmpty(this.state.shotCategory)} onChange={this.handleChange} />{' '}
-          <Button onClick={() => { this.applyCategory(this.state.selectedVisionShot.name, this.state.shotCategory) }}>apply category</Button>{' '}
+          <Button onClick={() => { this.applyCategory(selectedShotName, this.state.shotCategory) }}>apply category</Button>{' '}
           {optional(this.state.selectedVisionShot).k('categories').getOrElse([]).map((category, k) => <span key={k}>{`${optional(category).k('name').get()} `}</span>)}
 
           <div style={{ display: 'table-row' }}>
@@ -181,7 +181,7 @@ export class MazeView extends Component<{}, MazeState> {
           </div>
           <div style={{ display: 'table-row' }}>
             <div style={{ width: frame.width, height: frame.height, border: '0px solid black', display: 'table-cell', position: 'relative', color: 'lightblue' }}>
-              <img style={{ width: frame.width, height: frame.height, position: 'absolute' }} src={this.state.game + '/screenshot/' + this.state.selectedVisionShot.name} onClick={e => this.tapHandle(e, resizeK)} />
+              {selectedShotName != null ? <img style={{ width: frame.width, height: frame.height, position: 'absolute' }} src={this.state.game + '/screenshot/' + selectedShotName} onClick={e => this.tapHandle(e, resizeK)} /> : null}
               {
                 this.state.is_grid_display ?
                   grid.map((area, k) =>
