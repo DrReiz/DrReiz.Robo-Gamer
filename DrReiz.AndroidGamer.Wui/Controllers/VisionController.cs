@@ -107,13 +107,15 @@ namespace DrReiz.AndroidGamer.Wui.Controllers
 
         }
         [HttpPost("/{game}/tap-capture")]
-        public IActionResult TapAndCapture(string game, [FromBody]TapRequest request)
+        public async Task<IActionResult> TapAndCapture(string game, [FromBody]TapRequest request)
         {
             AdbDroid.Tap(game, request.X, request.Y);
 
-            CaptureByAction(game, $"{request.X};{request.Y}");
+            await Task.Delay(TimeSpan.FromSeconds(0.5));
 
-            var screenshotName = CaptureByAction(game, "wait");
+            var screenshotName = CaptureByAction(game, $"{request.X};{request.Y}");
+
+            //var screenshotName = CaptureByAction(game, "wait");
 
             return Json(new { visionShot = screenshotName });
 
