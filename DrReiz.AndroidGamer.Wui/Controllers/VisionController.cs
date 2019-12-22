@@ -1,6 +1,7 @@
 ﻿using LinqToDB;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using OpenCvSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -147,6 +148,27 @@ namespace DrReiz.AndroidGamer.Wui.Controllers
             return new { Categories = categories.Select(category => new { Name = category.Category }) };
         }
 
+        [HttpGet("/api/game/{game}/shot/{shot}/h")]
+        public object H(string game, string shot) => Hsv_Channel(game, shot, 0);
+        [HttpGet("/api/game/{game}/shot/{shot}/s")]
+        public object S(string game, string shot) => Hsv_Channel(game, shot, 1);
+        [HttpGet("/api/game/{game}/shot/{shot}/v")]
+        public object V(string game, string shot) => Hsv_Channel(game, shot, 2);
+
+        public object Hsv_Channel(string game, string shot, int channel)
+        {
+            var context = GameContext.Get(game);
+
+            var image = context.LoadShotAsMat(shot);
+
+            var hsv = new Mat();
+            Cv2.CvtColor(image, hsv, ColorConversionCodes.RGB2HSV);
+
+            Mat[] channels;
+            Cv2.Split(hsv, out channels);
+
+            return File(channels[channel].ToBytes(), "image/png");
+        }
     }
     public class TapRequest
     {
@@ -156,5 +178,20 @@ namespace DrReiz.AndroidGamer.Wui.Controllers
     public class PutShotCategoryRequest
     {
         public string Category;
+    }
+    public static class GameContextHlp
+    {
+        public static string ShotFilename(this GameContext context, string shot) => Path.Combine(context.StorageDir, shot + ".png");
+
+        public static byte[] LoadShot(this GameContext context, string shot)
+        {
+            return File.ReadAllBytes(context.ShotFilename(shot));
+        }
+        public static Mat LoadShotAsMat(this GameContext context, string shot)
+        {
+            var filename = context.ShotFilename(shot);
+            return new Mat(filename);
+        }
+
     }
 }

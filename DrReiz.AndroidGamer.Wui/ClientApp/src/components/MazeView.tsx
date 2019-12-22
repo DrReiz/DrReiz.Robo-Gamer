@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Spinner, Input } from 'reactstrap';
+import { Button, Spinner, Input, Row, Col } from 'reactstrap';
 import axios from 'axios'
 import { optional } from 'optional-chain'
 
@@ -207,9 +207,21 @@ export class MazeView extends Component<{}, MazeState> {
               }
             </div>
           </div>
+          {selectedShotName != null ?
+            <Row>
+              <Col sm={4}>
+                <img style={{ width: frame.width }} src={`/api/game/${this.state.game}/shot/${selectedShotName}/h`} />
+              </Col>
+              <Col sm={4}>
+                <img style={{ width: frame.width }} src={`/api/game/${this.state.game}/shot/${selectedShotName}/s`} />
+              </Col>
+              <Col sm={4}>
+                <img style={{ width: frame.width }} src={`/api/game/${this.state.game}/shot/${selectedShotName}/v`} />
+              </Col>
+            </Row>
+            : null}
         </div>
       </div>
-
     </div>;
   }
   handleChange = (event: React.ChangeEvent<HTMLInputElement>, sourceName?: string) => {
