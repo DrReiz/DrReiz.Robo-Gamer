@@ -35,7 +35,7 @@ namespace DrReiz.AndroidGamer.Wui
         public readonly TcpClient TcpClient;
         public readonly NetworkStream AdbStream;
 
-        public System.Drawing.Bitmap CaptureScreenshot()
+        public System.Drawing.Bitmap CaptureScreenshot(bool isRotate = false)
         {
             var watch = new Stopwatch();
             watch.Start();
@@ -53,7 +53,8 @@ namespace DrReiz.AndroidGamer.Wui
             var bitmap = LoadRawBitmap(bytes);
 
             //var bitmap = (System.Drawing.Bitmap)System.Drawing.Bitmap.FromStream(new System.IO.MemoryStream(bytes));
-            bitmap.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
+            if (isRotate)
+                bitmap.RotateFlip(System.Drawing.RotateFlipType.Rotate270FlipNone);
 
             var rotateTime = watch.Elapsed;
 
@@ -88,6 +89,11 @@ namespace DrReiz.AndroidGamer.Wui
         public void Back()
         {
             AdbApi.Back(AdbStream);
+        }
+
+        public string Shell(string command)
+        {
+            return AdbApi.RunShellCommand(AdbStream, command);
         }
 
         public void Dispose()
