@@ -21,8 +21,9 @@ namespace DrReiz.AndroidGamer.Wui
         public static readonly GameContext Gumball = new GameContext("gumball", @"t:\Data\Gumball\Screenshots");
         public static readonly GameContext Jewel = new GameContext("jewel", @"t:\Data\Jewel\Screenshots");//Jewel Legend
         public static readonly GameContext Empire = new GameContext("empire", @"t:\Data\Empire\Screenshots");//Empire & Puzzles
+        public static readonly GameContext JCross = new GameContext("com.ucdevs.jcross", @"t:\Data\com.ucdevs.jcross\Screenshots");
         public static readonly GameContext Other = new GameContext("other-game", @"t:\Data\Other-Game\Screenshots");
-        public static readonly GameContext[] All = new[] { Gumball, Jewel, Empire, Other };
+        public static readonly GameContext[] All = new[] { Gumball, Jewel, Empire, JCross, Other };
 
         public static GameContext Get(string game)
             => All.First(context => context.Game == game);
