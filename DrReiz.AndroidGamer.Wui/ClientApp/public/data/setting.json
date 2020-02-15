@@ -1,6 +1,6 @@
 {
-  "game": "jewel",
+  "game": "com.ucdevs.jcross",
   "selectedVisionShot": null,
 
-  "games":  ["gumball", "jewel", "empire", "other-game"]
+  "games": [ "gumball", "jewel", "empire", "other-game", "com.ucdevs.jcross" ]
 }
