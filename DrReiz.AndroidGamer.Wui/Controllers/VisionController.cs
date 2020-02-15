@@ -121,6 +121,19 @@ namespace DrReiz.AndroidGamer.Wui.Controllers
             return Json(new { visionShot = screenshotName });
 
         }
+        [HttpPost("/determine-game")]
+        public IActionResult DetermineGame()
+        {
+            using (var client = new AdbClient("emulator-5554"))
+            {
+                var result = client.Shell("dumpsys activity recents");
+
+                return Json(new { result = result });
+            }
+
+
+        }
+
 
         public string CaptureByAction(string game, string action)
         {
